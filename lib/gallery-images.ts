@@ -35,13 +35,8 @@ const captions = [
 ];
 
 const files: { file: string; type: GalleryItem["type"] }[] = [
-  { file: "20251122_122617.jpg", type: "image" },
-  { file: "20251122_122644.jpg", type: "image" },
-  { file: "20251122_122649.jpg", type: "image" },
-  { file: "20251122_122706.jpg", type: "image" },
   { file: "20251122_122709.jpg", type: "image" },
   { file: "20251122_123745.jpg", type: "image" },
-  { file: "20251122_123747.jpg", type: "image" },
   { file: "20251122_123755.jpg", type: "image" },
   { file: "20251122_123807.jpg", type: "image" },
   { file: "20251122_123819.jpg", type: "image" },
@@ -53,7 +48,6 @@ const files: { file: string; type: GalleryItem["type"] }[] = [
   { file: "20251122_145736.jpg", type: "image" },
   { file: "20251123_095927.jpg", type: "image" },
   { file: "20251123_095928.jpg", type: "image" },
-  { file: "20251123_100029.jpg", type: "image" },
   { file: "20251123_100033.jpg", type: "image" },
   { file: "IMG-20260215-WA0003.jpg", type: "image" },
   { file: "IMG-20260228-WA0007.jpg", type: "image" },
