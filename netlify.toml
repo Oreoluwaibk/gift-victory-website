@@ -1,0 +1,12 @@
+[build]
+  command = "npm run build"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# Set these in the Netlify dashboard (Site settings → Environment variables):
+# RESEND_API_KEY       — from https://resend.com/api-keys
+# RESEND_FROM_EMAIL    — verified sender, e.g. Perfect Love <rsvp@yourdomain.com>
