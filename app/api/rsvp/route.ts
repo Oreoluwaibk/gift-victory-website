@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { sendQrPassEmail } from "@/lib/email/send-qr-pass";
-import { createGuest } from "@/lib/guest-store";
+import { createGuest, DuplicateGuestError } from "@/lib/guest-store";
 
 export async function POST(request: Request) {
   try {
@@ -34,10 +34,22 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       guest,
+      alreadyRegistered: false,
       emailSent: emailResult.sent,
       emailError: emailResult.error,
     });
-  } catch {
+  } catch (err) {
+    if (err instanceof DuplicateGuestError) {
+      return NextResponse.json(
+        {
+          error: err.message,
+          guest: err.guest,
+          alreadyRegistered: true,
+        },
+        { status: 409 }
+      );
+    }
+
     return NextResponse.json(
       { error: "Unable to process RSVP. Please try again." },
       { status: 500 }

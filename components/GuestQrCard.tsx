@@ -11,9 +11,15 @@ type GuestQrCardProps = {
   guest: Guest;
   emailSent?: boolean;
   emailError?: string;
+  alreadyRegistered?: boolean;
 };
 
-export function GuestQrCard({ guest, emailSent, emailError }: GuestQrCardProps) {
+export function GuestQrCard({
+  guest,
+  emailSent,
+  emailError,
+  alreadyRegistered,
+}: GuestQrCardProps) {
   const [qrDataUrl, setQrDataUrl] = useState<string>("");
   const checkInUrl = `${wedding.siteUrl}/check-in/${guest.code}`;
 
@@ -45,7 +51,13 @@ export function GuestQrCard({ guest, emailSent, emailError }: GuestQrCardProps) 
       </div>
 
       <p className="mb-6 text-sm leading-relaxed text-muted-foreground">
-        {emailSent ? (
+        {alreadyRegistered ? (
+          <>
+            You have already confirmed with{" "}
+            <span className="font-medium text-foreground">{guest.email}</span>.
+            Save or download your existing QR pass below for check-in at the venue.
+          </>
+        ) : emailSent ? (
           <>
             Your QR pass has been sent to{" "}
             <span className="font-medium text-foreground">{guest.email}</span>.

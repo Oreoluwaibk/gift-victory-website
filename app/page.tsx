@@ -32,9 +32,7 @@ export default function HomePage() {
 
             <FadeIn delay={0.3}>
               <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg lg:mx-0">
-                {wedding.story.intro} Join us as we celebrate a union built on
-                faith, friendship, and perfect love — an unforgettable day surrounded
-                by the people who mean the most to us.
+                {wedding.story.homeIntro}
               </p>
             </FadeIn>
 
@@ -90,7 +88,8 @@ export default function HomePage() {
               <h2 className="font-display text-2xl font-semibold">When</h2>
               <p className="mt-2 text-muted-foreground">{wedding.dateDisplay}</p>
               <p className="mt-1 text-sm text-muted-foreground/80">
-                Full date & time coming soon
+                Ceremony {wedding.location.ceremony.time} · Reception{" "}
+                {wedding.location.reception.time}
               </p>
             </div>
           </StaggerItem>
@@ -100,6 +99,9 @@ export default function HomePage() {
               <MapPin className="mb-4 h-8 w-8 text-purple-rich" />
               <h2 className="font-display text-2xl font-semibold">Where</h2>
               <p className="mt-2 text-muted-foreground">{wedding.venue}</p>
+              <p className="mt-1 text-sm text-muted-foreground/80">
+                RCCG Goodnews Arena · Light Magic Event Centre
+              </p>
               <Link
                 href="/location"
                 className="mt-4 inline-block text-sm font-semibold text-purple-rich hover:underline"

@@ -72,15 +72,29 @@ export type CreateGuestInput = {
   message?: string;
 };
 
+export class DuplicateGuestError extends Error {
+  guest: Guest;
+
+  constructor(guest: Guest) {
+    super("This email address has already been used to confirm attendance.");
+    this.name = "DuplicateGuestError";
+    this.guest = guest;
+  }
+}
+
+export async function getGuestByEmail(email: string): Promise<Guest | null> {
+  const guests = await getAllGuests();
+  const normalizedEmail = email.trim().toLowerCase();
+  return guests.find((g) => g.email === normalizedEmail) ?? null;
+}
+
 export async function createGuest(input: CreateGuestInput): Promise<Guest> {
   const guests = await getAllGuests();
   const normalizedEmail = input.email.trim().toLowerCase();
 
-  const existing = guests.find(
-    (g) => g.email.toLowerCase() === normalizedEmail
-  );
+  const existing = guests.find((g) => g.email === normalizedEmail);
   if (existing) {
-    return existing;
+    throw new DuplicateGuestError(existing);
   }
 
   const guest: Guest = {

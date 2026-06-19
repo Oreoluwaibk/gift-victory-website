@@ -10,37 +10,30 @@ export default function StoryPage() {
 
   return (
     <main>
-      <section className="hero-gradient border-b border-border">
-        <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
-          <FadeIn className="text-center">
-            <p className="text-sm font-semibold uppercase tracking-[0.25em] text-purple-rich">
+      <section className="relative min-h-[50vh] overflow-hidden border-b border-border sm:min-h-[60vh]">
+        <Image
+          src={portraits.hero.src}
+          alt={portraits.hero.alt}
+          fill
+          sizes="100vw"
+          className="object-cover"
+          priority
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-background" />
+        <div className="relative mx-auto flex min-h-[50vh] max-w-6xl flex-col items-center justify-center px-4 py-20 text-center sm:min-h-[60vh] sm:px-6 lg:px-8">
+          <FadeIn>
+            <p className="text-sm font-semibold uppercase tracking-[0.25em] text-purple-glow">
               {wedding.hashtag}
             </p>
-            <h1 className="mt-3 font-display text-4xl font-bold sm:text-5xl md:text-6xl">
+            <h1 className="mt-3 font-display text-4xl font-bold text-white sm:text-5xl md:text-6xl">
               Our Story
             </h1>
-            <p className="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-muted-foreground">
+            <p className="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-white/90">
               {story.tagline}
             </p>
-          </FadeIn>
-
-          <FadeIn delay={0.15} className="mt-12">
-            <div className="relative mx-auto aspect-[21/9] max-w-4xl overflow-hidden rounded-3xl shadow-xl shadow-purple-deep/10">
-              <Image
-                src={portraits.together.src}
-                alt={portraits.together.alt}
-                fill
-                sizes="(max-width: 896px) 100vw, 896px"
-                className="object-cover"
-                priority
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-              <div className="absolute bottom-0 left-0 right-0 p-6 text-center text-white">
-                <p className="font-display text-2xl font-semibold sm:text-3xl">
-                  {groom.shortName} & {bride.shortName}
-                </p>
-              </div>
-            </div>
+            <p className="mt-4 font-display text-2xl font-semibold text-white sm:text-3xl">
+              {groom.shortName} & {bride.shortName}
+            </p>
           </FadeIn>
         </div>
       </section>
@@ -52,22 +45,13 @@ export default function StoryPage() {
           </p>
         </FadeIn>
 
-        <StaggerContainer className="grid gap-6 sm:grid-cols-3">
+        <StaggerContainer className="grid gap-6 sm:grid-cols-2">
           <StaggerItem>
             <PortraitCard
               label="The Groom"
               name={groom.name}
               src={portraits.groom.src}
               alt={portraits.groom.alt}
-            />
-          </StaggerItem>
-          <StaggerItem>
-            <PortraitCard
-              label="Together"
-              name={`${groom.shortName} & ${bride.shortName}`}
-              src={portraits.together.src}
-              alt={portraits.together.alt}
-              featured
             />
           </StaggerItem>
           <StaggerItem>
@@ -79,6 +63,37 @@ export default function StoryPage() {
             />
           </StaggerItem>
         </StaggerContainer>
+
+        <FadeIn delay={0.15} className="mt-10">
+          <p className="mb-5 text-center text-sm font-semibold uppercase tracking-[0.25em] text-purple-rich">
+            Together
+          </p>
+          <div className="grid gap-6 sm:grid-cols-2">
+            {portraits.together.map((photo, index) => (
+              <div
+                key={photo.src}
+                className="card-surface overflow-hidden rounded-3xl ring-2 ring-purple-soft/20"
+              >
+                <div className="relative aspect-[4/5]">
+                  <Image
+                    src={photo.src}
+                    alt={photo.alt}
+                    fill
+                    sizes="(max-width: 640px) 100vw, 50vw"
+                    className="object-cover"
+                    priority={index === 0}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
+                    <p className="font-display text-lg font-semibold">
+                      {groom.shortName} & {bride.shortName}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </FadeIn>
       </section>
 
       <section className="border-t border-border bg-muted/30">
@@ -86,6 +101,22 @@ export default function StoryPage() {
           <FadeIn className="mb-12 flex items-center justify-center gap-3">
             <BookOpen className="h-6 w-6 text-purple-rich" />
             <h2 className="font-display text-3xl font-bold">The Journey</h2>
+          </FadeIn>
+
+          <FadeIn className="mb-12 grid gap-4 sm:grid-cols-2">
+            {story.verses.map((verse) => (
+              <blockquote
+                key={verse.reference}
+                className="card-surface rounded-2xl p-5 text-left"
+              >
+                <p className="text-sm italic leading-relaxed text-muted-foreground">
+                  &ldquo;{verse.text}&rdquo;
+                </p>
+                <footer className="mt-3 text-xs font-semibold uppercase tracking-widest text-purple-rich">
+                  {verse.reference}
+                </footer>
+              </blockquote>
+            ))}
           </FadeIn>
 
           <div className="relative space-y-0">
@@ -153,26 +184,20 @@ function PortraitCard({
   name,
   src,
   alt,
-  featured = false,
 }: {
   label: string;
   name: string;
   src: string;
   alt: string;
-  featured?: boolean;
 }) {
   return (
-    <div
-      className={`card-surface overflow-hidden rounded-3xl ${
-        featured ? "sm:-mt-4 sm:mb-4 ring-2 ring-purple-soft/30" : ""
-      }`}
-    >
-      <div className={`relative ${featured ? "aspect-[3/4]" : "aspect-[4/5]"}`}>
+    <div className="card-surface overflow-hidden rounded-3xl">
+      <div className="relative aspect-[4/5]">
         <Image
           src={src}
           alt={alt}
           fill
-          sizes="(max-width: 640px) 100vw, 33vw"
+          sizes="(max-width: 640px) 100vw, 50vw"
           className="object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />

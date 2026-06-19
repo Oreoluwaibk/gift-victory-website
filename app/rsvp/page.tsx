@@ -31,6 +31,7 @@ export default function RsvpPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [guest, setGuest] = useState<Guest | null>(null);
+  const [alreadyRegistered, setAlreadyRegistered] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
   const [emailError, setEmailError] = useState<string | undefined>();
 
@@ -38,6 +39,7 @@ export default function RsvpPage() {
     e.preventDefault();
     setLoading(true);
     setError("");
+    setAlreadyRegistered(false);
 
     try {
       const res = await fetch("/api/rsvp", {
@@ -47,11 +49,19 @@ export default function RsvpPage() {
       });
 
       const data = await res.json();
+
+      if (res.status === 409 && data.alreadyRegistered) {
+        setGuest(data.guest);
+        setAlreadyRegistered(true);
+        return;
+      }
+
       if (!res.ok) {
         throw new Error(data.error ?? "Registration failed");
       }
 
       setGuest(data.guest);
+      setAlreadyRegistered(false);
       setEmailSent(Boolean(data.emailSent));
       setEmailError(data.emailError);
     } catch (err) {
@@ -66,15 +76,20 @@ export default function RsvpPage() {
       <main className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
         <FadeIn className="mb-8 text-center">
           <CheckCircle2 className="mx-auto mb-4 h-12 w-12 text-purple-rich" />
-          <h1 className="font-display text-4xl font-bold">You&apos;re on the list!</h1>
+          <h1 className="font-display text-4xl font-bold">
+            {alreadyRegistered ? "Already Confirmed!" : "You're on the list!"}
+          </h1>
           <p className="mt-3 text-muted-foreground">
-            Thank you for confirming your attendance, {guest.fullName.split(" ")[0]}.
+            {alreadyRegistered
+              ? `This email has already been used to RSVP. Here is your existing pass, ${guest.fullName.split(" ")[0]}.`
+              : `Thank you for confirming your attendance, ${guest.fullName.split(" ")[0]}.`}
           </p>
         </FadeIn>
         <GuestQrCard
           guest={guest}
           emailSent={emailSent}
           emailError={emailError}
+          alreadyRegistered={alreadyRegistered}
         />
       </main>
     );
@@ -89,8 +104,8 @@ export default function RsvpPage() {
         <h1 className="mt-3 font-display text-4xl font-bold sm:text-5xl">RSVP</h1>
         <p className="mx-auto mt-4 max-w-lg text-muted-foreground">
           Kindly confirm your attendance for the wedding of {wedding.groom.name}{" "}
-          and {wedding.bride.name}. You&apos;ll receive a unique QR pass for
-          check-in at the venue.
+          and {wedding.bride.name} on {wedding.dateDisplay}. Each email can only
+          RSVP once — you&apos;ll receive a unique QR pass for check-in at the venue.
         </p>
       </FadeIn>
 

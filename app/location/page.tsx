@@ -2,15 +2,10 @@ import Link from "next/link";
 import { Clock, ExternalLink, MapPin, Navigation2 } from "lucide-react";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/PageTransition";
 import { VenueMap } from "@/components/VenueMap";
-import {
-  getGoogleMapsSearchUrl,
-  getVenueDisplayAddress,
-  wedding,
-} from "@/lib/wedding-data";
+import { getGoogleMapsSearchUrl, wedding } from "@/lib/wedding-data";
 
 export default function LocationPage() {
-  const address = getVenueDisplayAddress();
-  const mapsUrl = getGoogleMapsSearchUrl();
+  const { ceremony, reception } = wedding.location;
 
   return (
     <main className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
@@ -22,9 +17,7 @@ export default function LocationPage() {
           Location
         </h1>
         <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
-          {wedding.location.confirmed
-            ? "Find directions to our celebration below."
-            : "Our venue is being finalized. The map shows the general area — the exact pin will be updated once confirmed."}
+          {wedding.eventTitle} · {wedding.dateDisplay} · {wedding.venue}
         </p>
       </FadeIn>
 
@@ -36,11 +29,13 @@ export default function LocationPage() {
         <StaggerItem>
           <div className="card-surface h-full rounded-3xl p-6">
             <MapPin className="mb-3 h-6 w-6 text-purple-rich" />
-            <h2 className="font-display text-xl font-semibold">Venue</h2>
-            <p className="mt-2 text-muted-foreground">{wedding.venue}</p>
-            <p className="mt-1 text-sm text-muted-foreground/80">{address}</p>
+            <h2 className="font-display text-xl font-semibold">White Wedding</h2>
+            <p className="mt-2 text-sm font-semibold text-purple-rich">
+              {ceremony.time}
+            </p>
+            <p className="mt-2 text-muted-foreground">{ceremony.address}</p>
             <a
-              href={mapsUrl}
+              href={getGoogleMapsSearchUrl(ceremony.mapQuery)}
               target="_blank"
               rel="noopener noreferrer"
               className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-purple-rich hover:underline"
@@ -54,11 +49,20 @@ export default function LocationPage() {
         <StaggerItem>
           <div className="card-surface h-full rounded-3xl p-6">
             <Clock className="mb-3 h-6 w-6 text-purple-rich" />
-            <h2 className="font-display text-xl font-semibold">Date & Time</h2>
-            <p className="mt-2 text-muted-foreground">{wedding.dateDisplay}</p>
-            <p className="mt-1 text-sm text-muted-foreground/80">
-              {wedding.location.ceremonyTime}
+            <h2 className="font-display text-xl font-semibold">Reception</h2>
+            <p className="mt-2 text-sm font-semibold text-purple-rich">
+              {reception.time}
             </p>
+            <p className="mt-2 text-muted-foreground">{reception.address}</p>
+            <a
+              href={getGoogleMapsSearchUrl(reception.mapQuery)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-purple-rich hover:underline"
+            >
+              Open in Google Maps
+              <ExternalLink className="h-3.5 w-3.5" />
+            </a>
           </div>
         </StaggerItem>
 
@@ -73,7 +77,7 @@ export default function LocationPage() {
               href="/rsvp"
               className="mt-4 inline-block text-sm font-semibold text-purple-rich hover:underline"
             >
-              RSVP to receive updates →
+              RSVP to confirm your seat →
             </Link>
           </div>
         </StaggerItem>

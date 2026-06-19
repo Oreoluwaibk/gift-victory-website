@@ -1,75 +1,118 @@
+import { couplePhotos, giftSrc } from "./gift-images";
+
 export const wedding = {
   groom: {
-    name: "Dr Gift Gureje",
+    name: "Dr Gift Oladipo Gureje",
     shortName: "Gift",
   },
   bride: {
-    name: "Dr Victory Elikwu",
+    name: "Dr Victory Ngozichukwu Elikwu",
     shortName: "Victory",
   },
   hashtag: "#PerfectLove26",
-  date: "2026",
-  dateDisplay: "Date to be announced",
-  venue: "Venue to be announced",
+  date: "2026-11-21",
+  dateDisplay: "Saturday, 21 November 2026",
+  eventTitle: "White Wedding",
+  venue: "Ibadan, Nigeria",
   siteUrl: "https://perfect-love26.netlify.app",
   location: {
-    /** Set to true once the final venue address is confirmed */
-    confirmed: false,
-    address: "",
-    city: "Abuja",
-    region: "Federal Capital Territory",
+    confirmed: true,
+    city: "Ibadan",
+    state: "Oyo State",
     country: "Nigeria",
-    latitude: 9.0579,
-    longitude: 7.4951,
-    /** Used for map search until exact address is set */
-    mapQuery: "Abuja, Federal Capital Territory, Nigeria",
-    ceremonyTime: "Ceremony & reception times to be announced",
+    latitude: 7.4166,
+    longitude: 3.9006,
+    mapQuery: "Orita Challenge, Ibadan, Nigeria",
+    ceremony: {
+      name: "White Wedding — RCCG Goodnews Arena",
+      address:
+        "RCCG Goodnews Arena (Beside Christ High School), Oleyo Road, Orita Challenge, Ibadan",
+      time: "10:00 AM",
+      mapQuery:
+        "RCCG Goodnews Arena Oleyo Road Orita Challenge Ibadan",
+    },
+    reception: {
+      name: "Reception — Light Magic Event Centre",
+      address:
+        "No 65, IDC, Julius Mojisola Street, Odo-Ona Elewe, Oluyole, Ibadan",
+      time: "1:00 PM",
+      mapQuery:
+        "Light Magic Event Centre Julius Mojisola Street Odo-Ona Elewe Oluyole Ibadan",
+    },
     parkingNotes:
-      "Directions and parking details will be shared with confirmed guests once the venue is finalized.",
+      "Parking is available at both venues. We recommend arriving early for the 10:00 AM ceremony. The reception at Light Magic Event Centre follows at 1:00 PM.",
   },
   story: {
     tagline:
-      "A love story written with faith, friendship, and a whole lot of grace.",
+      "From a hospital posting in Ile-Ife to forever — a love rooted in faith, friendship, and God's perfect timing.",
     intro:
-      "What began as a chance meeting blossomed into a lifelong partnership. Through shared dreams, laughter, and unwavering support, Gift and Victory found in each other a love worth celebrating.",
+      "Gift and Victory met in 2023 at the Seventh Day Adventist Hospital in Ile-Ife — he a house officer, she a medical student on posting. What began with academic conversations grew into phone calls, friendship, prayer, and a courtship both believe God prepared long before they ever met. On 7 December 2024, Victory said yes. Now, after sixteen months of discovery and growth, they invite you to witness the next chapter of their story.",
+    homeIntro:
+      "They met as doctor and medical student in Ile-Ife, grew from friendship into faith-filled courtship, and now invite you to celebrate their white wedding in Ibadan on 21 November 2026.",
     portraits: {
       groom: {
-        src: "/gift/IMG-20260228-WA0007.jpg",
-        alt: "Dr Gift Gureje",
+        src: giftSrc("groom1.jpeg"),
+        alt: "Dr Gift Oladipo Gureje",
       },
       bride: {
-        src: "/gift/IMG-20260228-WA0022.jpg",
-        alt: "Dr Victory Elikwu",
+        src: giftSrc("bride.jpg"),
+        alt: "Dr Victory Ngozichukwu Elikwu",
       },
-      together: {
-        src: "/gift/IMG-20260326-WA0017.jpg",
+      hero: {
+        src: giftSrc(couplePhotos.hero),
         alt: "Gift and Victory together",
       },
+      together: couplePhotos.together.map((file) => ({
+        src: giftSrc(file),
+        alt: "Gift and Victory together",
+      })),
     },
+    verses: [
+      {
+        reference: "Isaiah 60:22",
+        text: "A little one shall become a thousand, and a small one a strong nation: I the Lord will hasten it in his time.",
+      },
+      {
+        reference: "Philippians 1:6",
+        text: "Being confident of this very thing, that he which hath begun a good work in you will perform it until the day of Jesus Christ.",
+      },
+    ],
     chapters: [
       {
         title: "How We Met",
-        year: "The Beginning",
+        year: "2023 · Ile-Ife",
         content:
-          "Gift and Victory's paths crossed at a moment neither expected — yet both would later describe as perfectly timed. A conversation that started casually soon revealed shared values, ambitions, and a warmth that felt instantly familiar.",
+          "Their paths crossed at the Seventh Day Adventist Hospital in Ile-Ife, Osun State. Gift was completing his housemanship; Victory was a fifth-year medical student on posting. Their earliest conversations centred on academics — professional, focused, and unremarkable at the time. Yet beneath the surface, a foundation was being laid that neither of them could yet see.",
       },
       {
-        title: "Growing Together",
-        year: "Building a Bond",
+        title: "A Friendship Grows",
+        year: "2024",
         content:
-          "As doctors dedicated to serving others, they understood the weight of responsibility and the beauty of compassion. Side by side, they navigated demanding careers while nurturing a relationship rooted in respect, encouragement, and genuine friendship.",
+          "When Victory's posting ended and she left Ile-Ife, they stayed in touch — first occasionally, then more often, until the phone became a bridge between two hearts learning to know each other. In September 2024, Gift travelled to attend her medical induction ceremony — a milestone she would never forget. By October and November, Victory began to feel something deeper. It was her first relationship, and she was careful, prayerful, and honest with herself about every step.",
       },
       {
-        title: "The Proposal",
-        year: "Forever Begins",
+        title: "Led by Faith",
+        year: "Late 2024",
         content:
-          "When Gift asked Victory to spend forever by his side, the answer was yes — spoken with joy, tears, and the certainty of two hearts that had already chosen each other long before the question was asked.",
+          "For Gift, the journey had begun even earlier — in 2020, when he sensed God revealing something about his future marriage. Scriptures such as Psalm 66:8–12, Genesis 26:17–22, and the story of Rebekah in Genesis 24 became reference points along the way. When Victory entered his life, it felt like confirmation of what God had already spoken. Victory, too, sought the Holy Spirit's guidance and studied Christian teachings on relationships. When Gift proposed a courtship with the intention of marriage, she received Isaiah 60:22 — a promise that a small one would become a strong nation, in God's time.",
+      },
+      {
+        title: "Courtship Begins",
+        year: "7 December 2024",
+        content:
+          "After speaking with her parents, Victory gave her reply on 7 December 2024 — yes. With the support of both families and mentors, their courtship officially began. What followed has been a season of discovery: learning about themselves, about each other, and about the life they hope to build together under God.",
+      },
+      {
+        title: "Sixteen Months of Discovery",
+        year: "2024 – 2026",
+        content:
+          "Victory describes Gift as a man of the Word — generous, wise, goal-oriented, and patient enough to love and teach her even when she feels stubborn or unteachable. Gift sees in Victory a devoted believer with a gentle, calm spirit; a woman who values peace and has brought that peace into his life. She is sweet, homely, caring, and always wants the best for him. Together they hold to Philippians 1:6 — confident that He who began this good work will carry it through to completion.",
       },
       {
         title: "Our Wedding Day",
-        year: "Perfect Love",
+        year: "21 November 2026",
         content:
-          "Now they invite you to witness the next chapter of their story — a celebration of love, family, and the promise of forever. Your presence would mean the world to them as they begin this beautiful journey as husband and wife.",
+          "Join us in Ibadan for our white wedding at RCCG Goodnews Arena at 10:00 AM, followed by a reception at Light Magic Event Centre at 1:00 PM. Your presence would mean the world to us as we begin this beautiful journey as husband and wife.",
       },
     ],
   },
@@ -88,39 +131,14 @@ export const navItems: NavItem[] = [
   { href: "/location", label: "Location" },
 ];
 
-export function getVenueDisplayAddress(): string {
-  const { location, venue } = wedding;
-  if (location.confirmed && location.address) {
-    return [location.address, location.city, location.region, location.country]
-      .filter(Boolean)
-      .join(", ");
-  }
-  return venue;
+export function getMapEmbedUrl(query: string): string {
+  return `https://maps.google.com/maps?q=${encodeURIComponent(query)}&z=15&output=embed`;
 }
 
-export function getGoogleMapsDirectionsUrl(): string {
-  const { location } = wedding;
-  const query =
-    location.confirmed && location.address
-      ? [location.address, location.city, location.country].filter(Boolean).join(", ")
-      : location.mapQuery;
+export function getGoogleMapsDirectionsUrl(query: string): string {
   return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(query)}`;
 }
 
-export function getGoogleMapsSearchUrl(): string {
-  const { location } = wedding;
-  const query =
-    location.confirmed && location.address
-      ? [location.address, location.city, location.country].filter(Boolean).join(", ")
-      : location.mapQuery;
+export function getGoogleMapsSearchUrl(query: string): string {
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
-}
-
-export function getMapEmbedUrl(): string {
-  const { location } = wedding;
-  const query =
-    location.confirmed && location.address
-      ? [location.address, location.city, location.country].filter(Boolean).join(", ")
-      : `${location.latitude},${location.longitude}`;
-  return `https://maps.google.com/maps?q=${encodeURIComponent(query)}&z=14&output=embed`;
 }
