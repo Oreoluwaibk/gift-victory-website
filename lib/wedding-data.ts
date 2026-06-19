@@ -27,14 +27,6 @@ export const wedding = {
     parkingNotes:
       "Directions and parking details will be shared with confirmed guests once the venue is finalized.",
   },
-  gallery: [
-    { id: 1, alt: "Gift & Victory — engagement moment", caption: "Our engagement" },
-    { id: 2, alt: "Gift & Victory — candid laughter", caption: "Pure joy" },
-    { id: 3, alt: "Gift & Victory — portrait together", caption: "Together forever" },
-    { id: 4, alt: "Gift & Victory — celebration", caption: "Celebrating love" },
-    { id: 5, alt: "Gift & Victory — elegant portrait", caption: "Elegant moments" },
-    { id: 6, alt: "Gift & Victory — holding hands", caption: "Hand in hand" },
-  ],
 } as const;
 
 export type NavItem = {
