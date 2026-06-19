@@ -9,14 +9,14 @@ export type SendQrEmailResult = {
 };
 
 function getResendClient() {
-  const apiKey = process.env.RESEND_API_KEY;
+  const apiKey = process.env.NEXT_PUBLIC_RESEND_API_KEY;
   if (!apiKey) return null;
   return new Resend(apiKey);
 }
 
 function getFromAddress() {
   return (
-    process.env.RESEND_FROM_EMAIL ??
+    process.env.NEXT_PUBLIC_RESEND_FROM_EMAIL ??
     "Perfect Love Wedding <onboarding@resend.dev>"
   );
 }
