@@ -2,35 +2,25 @@ import QRCode from "qrcode";
 import { Resend } from "resend";
 import type { Guest } from "@/lib/guest-store";
 import { wedding } from "@/lib/wedding-data";
+import { formatResendError, getResendConfig } from "./config";
 
 export type SendQrEmailResult = {
   sent: boolean;
   error?: string;
+  messageId?: string;
 };
 
-function getResendClient() {
-  const apiKey = process.env.NEXT_PUBLIC_RESEND_API_KEY;
-  if (!apiKey) return null;
-  return new Resend(apiKey);
-}
-
-function getFromAddress() {
-  return (
-    process.env.NEXT_PUBLIC_RESEND_FROM_EMAIL ??
-    "Perfect Love Wedding <onboarding@resend.dev>"
-  );
-}
-
 export async function sendQrPassEmail(guest: Guest): Promise<SendQrEmailResult> {
-  const resend = getResendClient();
-  if (!resend) {
-    return {
-      sent: false,
-      error: "Email service is not configured (missing RESEND_API_KEY).",
-    };
+  const { apiKey, fromEmail, setupError } = getResendConfig();
+
+  if (!apiKey || setupError) {
+    return { sent: false, error: setupError ?? "Email service is not configured." };
   }
 
+  const resend = new Resend(apiKey);
+  const sender = fromEmail ?? "Perfect Love Wedding <onboarding@resend.dev>";
   const checkInUrl = `${wedding.siteUrl}/check-in/${guest.code}`;
+
   const qrBuffer = await QRCode.toBuffer(checkInUrl, {
     width: 400,
     margin: 2,
@@ -38,27 +28,29 @@ export async function sendQrPassEmail(guest: Guest): Promise<SendQrEmailResult> 
   });
 
   try {
-    const { error } = await resend.emails.send({
-      from: getFromAddress(),
-      to: guest.email,
+    const { data, error } = await resend.emails.send({
+      from: sender,
+      to: [guest.email],
       subject: `Your QR Pass — ${wedding.groom.shortName} & ${wedding.bride.shortName}'s Wedding`,
       html: buildEmailHtml(guest, checkInUrl),
       attachments: [
         {
           filename: `perfect-love-pass-${guest.code}.png`,
-          content: qrBuffer,
+          content: qrBuffer.toString("base64"),
         },
       ],
     });
 
     if (error) {
-      return { sent: false, error: error.message };
+      console.error("[resend] send failed:", error);
+      return { sent: false, error: formatResendError(error.message) };
     }
 
-    return { sent: true };
+    return { sent: true, messageId: data?.id };
   } catch (err) {
     const message = err instanceof Error ? err.message : "Failed to send email";
-    return { sent: false, error: message };
+    console.error("[resend] unexpected error:", err);
+    return { sent: false, error: formatResendError(message) };
   }
 }
 
