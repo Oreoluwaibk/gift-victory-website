@@ -46,9 +46,9 @@ export const wedding = {
     tagline:
       "From a hospital posting in Ile-Ife to forever — a love rooted in faith, friendship, and God's perfect timing.",
     intro:
-      "Gift and Victory met in 2023 at the Seventh Day Adventist Hospital in Ile-Ife — he a house officer, she a medical student on posting. What began with academic conversations grew into phone calls, friendship, prayer, and a courtship both believe God prepared long before they ever met. On 7 December 2024, Victory said yes. Now, after sixteen months of discovery and growth, they invite you to witness the next chapter of their story.",
+      "Gift and Victory met in 2023 at the Seventh Day Adventist Hospital in Ile-Ife — he a house officer, she a medical student on posting. What began with academic conversations grew into phone calls, friendship, and a courtship both believe God prepared long before they ever met. On 7 December 2024, Victory said yes. Now, after sixteen months of discovery and growth, they invite you to witness the next chapter of their story.",
     homeIntro:
-      "They met as doctor and medical student in Ile-Ife, grew from friendship into faith-filled courtship, and now invite you to celebrate their white wedding in Ibadan on 21 November 2026.",
+      "They met as doctor and medical student in Ile-Ife, grew from friendship into faith-filled courtship, and now invite you to celebrate their wedding with them.",
     portraits: {
       groom: {
         src: giftSrc("groom1.jpeg"),
@@ -112,7 +112,7 @@ export const wedding = {
         title: "Our Wedding Day",
         year: "21 November 2026",
         content:
-          "Join us in Ibadan for our white wedding at RCCG Goodnews Arena at 10:00 AM, followed by a reception at Light Magic Event Centre at 1:00 PM. Your presence would mean the world to us as we begin this beautiful journey as husband and wife.",
+          "Join us in Ibadan for our white wedding and a reception. Your presence would mean the world to us as we begin this beautiful journey as husband and wife.",
       },
     ],
   },
