@@ -4,7 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Heart, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
+import { BrandIcon } from "@/components/BrandIcon";
 import { navItems, wedding } from "@/lib/wedding-data";
 import { ThemeToggle } from "./ThemeToggle";
 
@@ -18,9 +19,9 @@ export function Navigation() {
         <Link href="/" className="group flex items-center gap-2">
           <motion.span
             whileHover={{ scale: 1.05 }}
-            className="flex h-9 w-9 items-center justify-center rounded-full bg-purple-deep text-white"
+            className="flex h-9 w-9 items-center justify-center"
           >
-            <Heart className="h-4 w-4 fill-current" />
+            <BrandIcon size={36} />
           </motion.span>
           <span className="font-display text-lg font-semibold tracking-wide text-foreground sm:text-xl">
             Perfect Love

@@ -27,6 +27,52 @@ export const wedding = {
     parkingNotes:
       "Directions and parking details will be shared with confirmed guests once the venue is finalized.",
   },
+  story: {
+    tagline:
+      "A love story written with faith, friendship, and a whole lot of grace.",
+    intro:
+      "What began as a chance meeting blossomed into a lifelong partnership. Through shared dreams, laughter, and unwavering support, Gift and Victory found in each other a love worth celebrating.",
+    portraits: {
+      groom: {
+        src: "/gift/IMG-20260228-WA0007.jpg",
+        alt: "Dr Gift Gureje",
+      },
+      bride: {
+        src: "/gift/IMG-20260228-WA0022.jpg",
+        alt: "Dr Victory Elikwu",
+      },
+      together: {
+        src: "/gift/IMG-20260326-WA0017.jpg",
+        alt: "Gift and Victory together",
+      },
+    },
+    chapters: [
+      {
+        title: "How We Met",
+        year: "The Beginning",
+        content:
+          "Gift and Victory's paths crossed at a moment neither expected — yet both would later describe as perfectly timed. A conversation that started casually soon revealed shared values, ambitions, and a warmth that felt instantly familiar.",
+      },
+      {
+        title: "Growing Together",
+        year: "Building a Bond",
+        content:
+          "As doctors dedicated to serving others, they understood the weight of responsibility and the beauty of compassion. Side by side, they navigated demanding careers while nurturing a relationship rooted in respect, encouragement, and genuine friendship.",
+      },
+      {
+        title: "The Proposal",
+        year: "Forever Begins",
+        content:
+          "When Gift asked Victory to spend forever by his side, the answer was yes — spoken with joy, tears, and the certainty of two hearts that had already chosen each other long before the question was asked.",
+      },
+      {
+        title: "Our Wedding Day",
+        year: "Perfect Love",
+        content:
+          "Now they invite you to witness the next chapter of their story — a celebration of love, family, and the promise of forever. Your presence would mean the world to them as they begin this beautiful journey as husband and wife.",
+      },
+    ],
+  },
 } as const;
 
 export type NavItem = {
@@ -36,6 +82,7 @@ export type NavItem = {
 
 export const navItems: NavItem[] = [
   { href: "/", label: "Home" },
+  { href: "/story", label: "Our Story" },
   { href: "/gallery", label: "Gallery" },
   { href: "/rsvp", label: "RSVP" },
   { href: "/location", label: "Location" },
