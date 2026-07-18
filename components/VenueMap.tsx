@@ -9,9 +9,16 @@ type VenueMapCardProps = {
   address: string;
   time: string;
   mapQuery: string;
+  mapNote?: string;
 };
 
-function VenueMapCard({ title, address, time, mapQuery }: VenueMapCardProps) {
+function VenueMapCard({
+  title,
+  address,
+  time,
+  mapQuery,
+  mapNote,
+}: VenueMapCardProps) {
   const embedUrl = getMapEmbedUrl(mapQuery);
   const directionsUrl = getGoogleMapsDirectionsUrl(mapQuery);
 
@@ -21,6 +28,9 @@ function VenueMapCard({ title, address, time, mapQuery }: VenueMapCardProps) {
         <p className="font-display text-xl font-semibold">{title}</p>
         <p className="mt-1 text-sm font-semibold text-purple-rich">{time}</p>
         <p className="mt-2 text-sm text-muted-foreground">{address}</p>
+        {mapNote && (
+          <p className="mt-2 text-xs text-purple-rich">{mapNote}</p>
+        )}
       </div>
       <div className="relative aspect-[16/10] w-full sm:aspect-[21/9]">
         <iframe

@@ -100,7 +100,7 @@ export default function StoryPage() {
         <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8">
           <FadeIn className="mb-12 flex items-center justify-center gap-3">
             <BookOpen className="h-6 w-6 text-purple-rich" />
-            <h2 className="font-display text-3xl font-bold">The Journey</h2>
+            <h2 className="font-display text-3xl font-bold">Our Journey</h2>
           </FadeIn>
 
           <FadeIn className="mb-12 grid gap-4 sm:grid-cols-2">

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { BookHeart, Calendar, MapPin, Sparkles } from "lucide-react";
 import { HomeCarousel, HomePhotoStrip } from "@/components/HomeCarousel";
+import { GiftToCoupleButton } from "@/components/GiftToCoupleButton";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/PageTransition";
 import { wedding } from "@/lib/wedding-data";
 
@@ -37,7 +38,7 @@ export default function HomePage() {
             </FadeIn>
 
             <FadeIn delay={0.4}>
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center lg:justify-start">
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:justify-center lg:justify-start">
                 <Link
                   href="/rsvp"
                   className="inline-flex items-center justify-center gap-2 rounded-full bg-purple-deep px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-purple-deep/20 transition hover:bg-purple-rich"
@@ -45,6 +46,7 @@ export default function HomePage() {
                   <Sparkles className="h-4 w-4" />
                   RSVP & Reserve Your Seat
                 </Link>
+                <GiftToCoupleButton />
                 <Link
                   href="/story"
                   className="inline-flex items-center justify-center gap-2 rounded-full border border-border bg-card px-7 py-3.5 text-sm font-semibold transition hover:border-purple-soft hover:text-purple-rich"
@@ -100,7 +102,7 @@ export default function HomePage() {
               <h2 className="font-display text-2xl font-semibold">Where</h2>
               <p className="mt-2 text-muted-foreground">{wedding.venue}</p>
               <p className="mt-1 text-sm text-muted-foreground/80">
-                RCCG Goodnews Arena · Light Magic Event Centre
+                RCCG Goodnews Zonal Headquarters · Light Magic Event Centre
               </p>
               <Link
                 href="/location"

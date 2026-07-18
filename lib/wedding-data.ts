@@ -2,11 +2,11 @@ import { couplePhotos, giftSrc } from "./gift-images";
 
 export const wedding = {
   groom: {
-    name: "Dr Gift Oladipo Gureje",
+    name: "Gift Oladipo Gureje",
     shortName: "Gift",
   },
   bride: {
-    name: "Dr Victory Ngozichukwu Elikwu",
+    name: "Victory Ngozichukwu Elikwu",
     shortName: "Victory",
   },
   hashtag: "#PerfectLove26",
@@ -24,18 +24,17 @@ export const wedding = {
     longitude: 3.9006,
     mapQuery: "Orita Challenge, Ibadan, Nigeria",
     ceremony: {
-      name: "White Wedding — RCCG Goodnews Arena",
+      name: "White Wedding — RCCG Goodnews Zonal Headquarters",
       address:
-        "RCCG Goodnews Arena (Beside Christ High School), Oleyo Road, Orita Challenge, Ibadan",
-      time: "10:00 AM",
-      mapQuery:
-        "RCCG Goodnews Arena Oleyo Road Orita Challenge Ibadan",
+        "RCCG, Goodnews Zonal Headquarters (Beside Christ High School), Oleyo Road, Tipper garage, Orita Challenge, Ibadan",
+      time: "11:00 AM",
+      mapQuery: "8RGV+2WG, Idi-Iroko/Ikereku 110115, Oyo, Nigeria",
     },
     reception: {
       name: "Reception — Light Magic Event Centre",
       address:
-        "No 65, IDC, Julius Mojisola Street, Odo-Ona Elewe, Oluyole, Ibadan",
-      time: "1:00 PM",
+        "No 65, IDC Primary School, Tipper Garage,Off Akala Express Road, Ibadan",
+      time: "2:00 PM",
       mapQuery:
         "Light Magic Event Centre Julius Mojisola Street Odo-Ona Elewe Oluyole Ibadan",
     },
@@ -44,19 +43,19 @@ export const wedding = {
   },
   story: {
     tagline:
-      "From a hospital posting in Ile-Ife to forever — a love rooted in faith, friendship, and God's perfect timing.",
+      "A love rooted in faith, friendship, and God's perfect timing.",
     intro:
-      "Gift and Victory met in 2023 at the Seventh Day Adventist Hospital in Ile-Ife — he a house officer, she a medical student on posting. What began with academic conversations grew into phone calls, friendship, and a courtship both believe God prepared long before they ever met. On 7 December 2024, Victory said yes. Now, after sixteen months of discovery and growth, they invite you to witness the next chapter of their story.",
+      "Gift and Victory met in 2023 in Ile-Ife. What began as an academic conversation grew into phone calls, friendship, and a courtship both believe God prepared long before they ever met. On 7 December 2024, Victory said yes. Now, after two years of discovery and growth, they invite you to witness the next chapter of their story.",
     homeIntro:
-      "They met as doctor and medical student in Ile-Ife, grew from friendship into faith-filled courtship, and now invite you to celebrate their wedding with them.",
+      "They met in Ile-Ife, grew from friendship into courtship, and now invite you to celebrate their wedding with them.",
     portraits: {
       groom: {
         src: giftSrc("groom1.jpeg"),
-        alt: "Dr Gift Oladipo Gureje",
+        alt: "Gift Oladipo Gureje",
       },
       bride: {
         src: giftSrc("bride.jpg"),
-        alt: "Dr Victory Ngozichukwu Elikwu",
+        alt: "Victory Ngozichukwu Elikwu",
       },
       hero: {
         src: giftSrc(couplePhotos.hero),
@@ -82,37 +81,54 @@ export const wedding = {
         title: "How We Met",
         year: "2023 · Ile-Ife",
         content:
-          "Their paths crossed at the Seventh Day Adventist Hospital in Ile-Ife, Osun State. Gift was completing his housemanship; Victory was a fifth-year medical student on posting. Their earliest conversations centred on academics — professional, focused, and unremarkable at the time. Yet beneath the surface, a foundation was being laid that neither of them could yet see.",
+          "We met at the Seventh Day Adventist Hospital in Ile-Ife, Osun State. Gift was completing his housemanship, and I was a fifth-year medical student on posting. Our earliest conversations centred on academics — professional, focused, and unremarkable at the time. Yet beneath the surface, a foundation was being laid that we could not yet see.",
       },
       {
         title: "A Friendship Grows",
         year: "2024",
         content:
-          "When Victory's posting ended and she left Ile-Ife, they stayed in touch — first occasionally, then more often, until the phone became a bridge between two hearts learning to know each other. In September 2024, Gift travelled to attend her medical induction ceremony — a milestone she would never forget. By October and November, Victory began to feel something deeper. It was her first relationship, and she was careful, prayerful, and honest with herself about every step.",
+          "When my posting ended and I left Ile-Ife, we stayed in touch — first occasionally, then more often, until the phone became a bridge between our hearts. In September 2024, Gift travelled to attend my medical induction ceremony — a milestone I will never forget. By October and November, I began to feel something deeper. It was my first relationship, and I was careful, prayerful, and honest with myself about every step.",
       },
       {
         title: "Led by Faith",
         year: "Late 2024",
         content:
-          "For Gift, the journey had begun even earlier — in 2020, when he sensed God revealing something about his future marriage. Scriptures such as Psalm 66:8–12, Genesis 26:17–22, and the story of Rebekah in Genesis 24 became reference points along the way. When Victory entered his life, it felt like confirmation of what God had already spoken. Victory, too, sought the Holy Spirit's guidance and studied Christian teachings on relationships. When Gift proposed a courtship with the intention of marriage, she received Isaiah 60:22 — a promise that a small one would become a strong nation, in God's time.",
+          "For Gift, this journey had begun even earlier — in 2020, when he sensed God revealing something about his future marriage. When we met each other, it felt like confirmation of what God had already spoken. I, too, sought the Holy Spirit's guidance and studied Christian teachings on relationships. Gift proposed a courtship with the intention of marriage, on the 30th of November 2024.",
       },
       {
         title: "Courtship Begins",
         year: "7 December 2024",
         content:
-          "After speaking with her parents, Victory gave her reply on 7 December 2024 — yes. With the support of both families and mentors, their courtship officially began. What followed has been a season of discovery: learning about themselves, about each other, and about the life they hope to build together under God.",
+          "After speaking with my parents, I gave my reply on 7 December 2024 — yes. With the support of both our families and mentors, our courtship officially began. What followed has been a season of discovery: learning about ourselves, about each other, and about the life we hope to build together under God.",
       },
-      {
-        title: "Sixteen Months of Discovery",
-        year: "2024 – 2026",
-        content:
-          "Victory describes Gift as a man of the Word — generous, wise, goal-oriented, and patient enough to love and teach her even when she feels stubborn or unteachable. Gift sees in Victory a devoted believer with a gentle, calm spirit; a woman who values peace and has brought that peace into his life. She is sweet, homely, caring, and always wants the best for him. Together they hold to Philippians 1:6 — confident that He who began this good work will carry it through to completion.",
-      },
+      // {
+      //   title: "Two years of Discovery",
+      //   year: "2024 – 2026",
+      //   content:
+      //     "I know Gift as a man of the Word — generous, wise, goal-oriented, and patient enough to love and teach me even when I feel stubborn or unteachable. Gift sees in me a devoted believer with a gentle, calm spirit; a woman who values peace and has brought that peace into his life. He says I am sweet, homely, caring, and always want the best for him. Together we hold to Philippians 1:6 — confident that He who began this good work in us will carry it through to completion.",
+      // },
       {
         title: "Our Wedding Day",
         year: "21 November 2026",
         content:
-          "Join us in Ibadan for our white wedding and a reception. Your presence would mean the world to us as we begin this beautiful journey as husband and wife.",
+          "We invite you to join us in Ibadan for our white wedding and reception. Your presence would mean the world to us as we begin this beautiful journey as husband and wife.",
+      },
+    ],
+  },
+  gifts: {
+    title: "Gift the Couple",
+    subtitle:
+      "Your presence is our greatest gift. If you wish to bless us further, you may send a gift to either account below.",
+    accounts: [
+      {
+        name: "Gureje Gift",
+        bank: "Access Bank",
+        accountNumber: "0699940157",
+      },
+      {
+        name: "Elikwu Victory",
+        bank: "Access Bank",
+        accountNumber: "0101075560",
       },
     ],
   },

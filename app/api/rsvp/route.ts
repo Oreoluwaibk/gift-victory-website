@@ -13,6 +13,13 @@ export async function POST(request: Request) {
       );
     }
 
+    if (!body.message?.trim()) {
+      return NextResponse.json(
+        { error: "A message to the couple is required." },
+        { status: 400 }
+      );
+    }
+
     const guestsCount = Number(body.guestsCount);
     if (!guestsCount || guestsCount < 1 || guestsCount > 10) {
       return NextResponse.json(

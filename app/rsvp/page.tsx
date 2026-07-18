@@ -195,11 +195,12 @@ export default function RsvpPage() {
 
         <div>
           <label htmlFor="message" className="mb-1.5 block text-sm font-medium">
-            Message to the couple
+            Message to the couple *
           </label>
           <textarea
             id="message"
             rows={3}
+            required
             value={form.message}
             onChange={(e) => setForm({ ...form, message: e.target.value })}
             className="w-full resize-none rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none transition focus:border-purple-soft focus:ring-2 focus:ring-purple-soft/20"

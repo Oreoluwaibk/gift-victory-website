@@ -79,10 +79,10 @@ function getCaption(file: string, index: number): string {
 
 function getAlt(file: string, caption: string): string {
   if (file === "groom1.jpeg" || file === "groom2.jpeg") {
-    return `Dr Gift Oladipo Gureje — ${caption}`;
+    return `Gift Oladipo Gureje — ${caption}`;
   }
   if (file === "bride.jpg") {
-    return `Dr Victory Ngozichukwu Elikwu — ${caption}`;
+    return `Victory Ngozichukwu Elikwu — ${caption}`;
   }
   if (
     file === "bride&groom.jpeg" ||
