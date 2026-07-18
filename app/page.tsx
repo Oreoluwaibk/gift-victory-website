@@ -25,11 +25,11 @@ export default function HomePage() {
               </h1>
             </FadeIn>
 
-            <FadeIn delay={0.2}>
+            {/* <FadeIn delay={0.2}>
               <p className="mt-5 font-display text-xl text-muted-foreground sm:text-2xl">
                 {wedding.groom.name} & {wedding.bride.name}
               </p>
-            </FadeIn>
+            </FadeIn> */}
 
             <FadeIn delay={0.3}>
               <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg lg:mx-0">
