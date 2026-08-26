@@ -64,6 +64,38 @@ export default function StoryPage() {
           </StaggerItem>
         </StaggerContainer>
 
+        {portraits.brideGallery.length > 0 && (
+          <FadeIn delay={0.1} className="mt-10">
+            <p className="mb-5 text-center text-sm font-semibold uppercase tracking-[0.25em] text-purple-rich">
+              The Bride
+            </p>
+            <div className="grid gap-6 sm:grid-cols-2">
+              {portraits.brideGallery.map((photo) => (
+                <div
+                  key={photo.src}
+                  className="card-surface overflow-hidden rounded-3xl ring-2 ring-purple-soft/20"
+                >
+                  <div className="relative aspect-[4/5]">
+                    <Image
+                      src={photo.src}
+                      alt={photo.alt}
+                      fill
+                      sizes="(max-width: 640px) 100vw, 50vw"
+                      className="object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+                    <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
+                      <p className="font-display text-lg font-semibold">
+                        {bride.shortName}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </FadeIn>
+        )}
+
         <FadeIn delay={0.15} className="mt-10">
           <p className="mb-5 text-center text-sm font-semibold uppercase tracking-[0.25em] text-purple-rich">
             Together

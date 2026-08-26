@@ -12,7 +12,6 @@ type FormState = {
   fullName: string;
   email: string;
   phone: string;
-  guestsCount: number;
   dietaryNotes: string;
   message: string;
 };
@@ -21,7 +20,6 @@ const initialForm: FormState = {
   fullName: "",
   email: "",
   phone: "",
-  guestsCount: 1,
   dietaryNotes: "",
   message: "",
 };
@@ -104,8 +102,9 @@ export default function RsvpPage() {
         <h1 className="mt-3 font-display text-4xl font-bold sm:text-5xl">RSVP</h1>
         <p className="mx-auto mt-4 max-w-lg text-muted-foreground">
           Kindly confirm your attendance for the wedding of {wedding.groom.name}{" "}
-          and {wedding.bride.name} on {wedding.dateDisplay}. Each email can only
-          RSVP once — you&apos;ll receive a unique QR pass for check-in at the venue.
+          and {wedding.bride.name} on {wedding.dateDisplay}. Each guest must
+          register individually with their own email — you&apos;ll receive a
+          unique QR pass for check-in at the venue.
         </p>
       </FadeIn>
 
@@ -158,26 +157,6 @@ export default function RsvpPage() {
               placeholder="+234 ..."
             />
           </div>
-        </div>
-
-        <div>
-          <label htmlFor="guestsCount" className="mb-1.5 block text-sm font-medium">
-            Number of guests (including you) *
-          </label>
-          <select
-            id="guestsCount"
-            value={form.guestsCount}
-            onChange={(e) =>
-              setForm({ ...form, guestsCount: Number(e.target.value) })
-            }
-            className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none transition focus:border-purple-soft focus:ring-2 focus:ring-purple-soft/20"
-          >
-            {[1, 2, 3, 4, 5].map((n) => (
-              <option key={n} value={n}>
-                {n} {n === 1 ? "guest" : "guests"}
-              </option>
-            ))}
-          </select>
         </div>
 
         <div>

@@ -7,7 +7,6 @@ import {
   CheckCircle2,
   Loader2,
   UserCheck,
-  Users,
 } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -113,19 +112,12 @@ export default function CheckInPage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-4 text-sm">
-          <div className="rounded-xl bg-muted/60 p-4">
-            <Users className="mb-2 h-5 w-5 text-purple-rich" />
-            <p className="text-muted-foreground">Party size</p>
-            <p className="text-lg font-semibold">{guest.guestsCount}</p>
-          </div>
-          <div className="rounded-xl bg-muted/60 p-4">
-            <CheckCircle2 className="mb-2 h-5 w-5 text-purple-rich" />
-            <p className="text-muted-foreground">Status</p>
-            <p className="text-lg font-semibold">
-              {isCheckedIn ? "Checked in" : "Registered"}
-            </p>
-          </div>
+        <div className="rounded-xl bg-muted/60 p-4 text-sm">
+          <CheckCircle2 className="mb-2 h-5 w-5 text-purple-rich" />
+          <p className="text-muted-foreground">Status</p>
+          <p className="text-lg font-semibold">
+            {isCheckedIn ? "Checked in" : "Registered"}
+          </p>
         </div>
 
         {guest.dietaryNotes && (

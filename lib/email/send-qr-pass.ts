@@ -91,9 +91,7 @@ function buildEmailHtml(guest: Guest, checkInUrl: string): string {
                   <tr>
                     <td style="padding:20px;">
                       <p style="margin:0 0 8px;font-size:13px;color:#5c4a6e;">Guest name</p>
-                      <p style="margin:0 0 16px;font-size:16px;font-weight:600;color:#1a1025;">${guest.fullName}</p>
-                      <p style="margin:0 0 8px;font-size:13px;color:#5c4a6e;">Party size</p>
-                      <p style="margin:0;font-size:16px;font-weight:600;color:#1a1025;">${guest.guestsCount} ${guest.guestsCount === 1 ? "guest" : "guests"}</p>
+                      <p style="margin:0;font-size:16px;font-weight:600;color:#1a1025;">${guest.fullName}</p>
                     </td>
                   </tr>
                 </table>

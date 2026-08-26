@@ -106,10 +106,6 @@ export function GuestQrCard({
           <span className="text-muted-foreground">Guest:</span>{" "}
           <span className="font-medium">{guest.fullName}</span>
         </p>
-        <p>
-          <span className="text-muted-foreground">Party size:</span>{" "}
-          <span className="font-medium">{guest.guestsCount}</span>
-        </p>
       </div>
 
       <div className="mt-6 flex flex-col gap-3 sm:flex-row">

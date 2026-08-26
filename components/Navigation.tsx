@@ -6,6 +6,7 @@ import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { BrandIcon } from "@/components/BrandIcon";
+import { GiftToCoupleButton } from "@/components/GiftToCoupleButton";
 import { navItems, wedding } from "@/lib/wedding-data";
 import { ThemeToggle } from "./ThemeToggle";
 
@@ -53,6 +54,9 @@ export function Navigation() {
               </li>
             );
           })}
+          <li>
+            <GiftToCoupleButton variant="nav" />
+          </li>
         </ul>
 
         <div className="flex items-center gap-2">
@@ -101,6 +105,17 @@ export function Navigation() {
                   </motion.li>
                 );
               })}
+              <motion.li
+                initial={{ opacity: 0, x: -12 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: navItems.length * 0.05 }}
+              >
+                <GiftToCoupleButton
+                  variant="nav"
+                  className="w-full justify-start px-4 py-3 text-base"
+                  onOpen={() => setMobileOpen(false)}
+                />
+              </motion.li>
             </ul>
           </motion.div>
         )}

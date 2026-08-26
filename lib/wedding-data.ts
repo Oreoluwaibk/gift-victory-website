@@ -1,4 +1,4 @@
-import { couplePhotos, giftSrc } from "./gift-images";
+import { bridePhotos, couplePhotos, giftSrc } from "./gift-images";
 
 export const wedding = {
   groom: {
@@ -54,9 +54,13 @@ export const wedding = {
         alt: "Gift Oladipo Gureje",
       },
       bride: {
-        src: giftSrc("bride.jpg"),
+        src: giftSrc(bridePhotos.portrait),
         alt: "Victory Ngozichukwu Elikwu",
       },
+      brideGallery: bridePhotos.more.map((file) => ({
+        src: giftSrc(file),
+        alt: "Victory Ngozichukwu Elikwu",
+      })),
       hero: {
         src: giftSrc(couplePhotos.hero),
         alt: "Gift and Victory together",
@@ -122,8 +126,8 @@ export const wedding = {
     accounts: [
       {
         name: "Gureje Gift",
-        bank: "Access Bank",
-        accountNumber: "0699940157",
+        bank: "GTBank",
+        accountNumber: "0158767416",
       },
       {
         name: "Elikwu Victory",

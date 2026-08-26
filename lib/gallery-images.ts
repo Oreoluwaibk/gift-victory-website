@@ -53,7 +53,9 @@ const files: { file: string; type: GalleryItem["type"] }[] = [
   { file: "bride&groom.jpeg", type: "image" },
   { file: "bride&groom2.jpeg", type: "image" },
   { file: "bride&groom3.jpeg", type: "image" },
-  { file: "bride.jpg", type: "image" },
+  { file: "victory-new-1.jpeg", type: "image" },
+  { file: "victory-new-2.jpeg", type: "image" },
+  { file: "victory-new-3.jpeg", type: "image" },
   { file: "groom1.jpeg", type: "image" },
   { file: "groom2.jpeg", type: "image" },
   { file: "IMG-20260215-WA0003.jpg", type: "image" },
@@ -66,7 +68,13 @@ const files: { file: string; type: GalleryItem["type"] }[] = [
 
 function getCaption(file: string, index: number): string {
   if (file === "groom1.jpeg" || file === "groom2.jpeg") return "The Groom";
-  if (file === "bride.jpg") return "The Bride";
+  if (
+    file === "victory-new-1.jpeg" ||
+    file === "victory-new-2.jpeg" ||
+    file === "victory-new-3.jpeg"
+  ) {
+    return "The Bride";
+  }
   if (
     file === "bride&groom.jpeg" ||
     file === "bride&groom2.jpeg" ||
@@ -81,7 +89,11 @@ function getAlt(file: string, caption: string): string {
   if (file === "groom1.jpeg" || file === "groom2.jpeg") {
     return `Gift Oladipo Gureje — ${caption}`;
   }
-  if (file === "bride.jpg") {
+  if (
+    file === "victory-new-1.jpeg" ||
+    file === "victory-new-2.jpeg" ||
+    file === "victory-new-3.jpeg"
+  ) {
     return `Victory Ngozichukwu Elikwu — ${caption}`;
   }
   if (
