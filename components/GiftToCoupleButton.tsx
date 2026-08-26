@@ -44,20 +44,20 @@ export function GiftToCoupleButton({
     variant === "primary"
       ? "bg-purple-deep text-white shadow-lg shadow-purple-deep/20 hover:bg-purple-rich"
       : variant === "nav"
-        ? "text-muted-foreground hover:text-purple-rich"
+        ? ""
         : "border border-border bg-card hover:border-purple-soft hover:text-purple-rich";
 
-  const shapeClass =
+  const layoutClass =
     variant === "nav"
-      ? "rounded-full px-4 py-2 text-sm font-medium"
-      : "rounded-full px-7 py-3.5 text-sm font-semibold";
+      ? "block w-full font-[family-name:var(--font-inter)] transition-colors md:inline md:w-auto"
+      : "inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 text-sm font-semibold transition-colors";
 
   return (
     <>
       <button
         type="button"
         onClick={openModal}
-        className={`inline-flex items-center justify-center gap-2 transition ${shapeClass} ${baseClass} ${className}`}
+        className={`${layoutClass} ${baseClass} ${className}`}
       >
         {variant !== "nav" && <Gift className="h-4 w-4" />}
         {wedding.gifts.title}

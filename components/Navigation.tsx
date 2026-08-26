@@ -55,7 +55,10 @@ export function Navigation() {
             );
           })}
           <li>
-            <GiftToCoupleButton variant="nav" />
+            <GiftToCoupleButton
+              variant="nav"
+              className="relative px-4 py-2 text-sm font-medium text-muted-foreground hover:text-purple-rich"
+            />
           </li>
         </ul>
 
@@ -112,7 +115,7 @@ export function Navigation() {
               >
                 <GiftToCoupleButton
                   variant="nav"
-                  className="w-full justify-start px-4 py-3 text-base"
+                  className="rounded-xl px-4 py-3 text-base font-medium text-muted-foreground hover:bg-muted hover:text-foreground"
                   onOpen={() => setMobileOpen(false)}
                 />
               </motion.li>

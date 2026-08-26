@@ -5,7 +5,7 @@ export function giftSrc(filename: string): string {
 
 export const couplePhotos = {
   hero: "bride&groom.jpeg",
-  together: ["bride&groom2.jpeg", "bride&groom3.jpeg"] as const,
+  together: ["20251122_123807.jpg", "20251123_100033.jpg"] as const,
 };
 
 export const bridePhotos = {
