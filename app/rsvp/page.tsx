@@ -32,6 +32,8 @@ export default function RsvpPage() {
   const [alreadyRegistered, setAlreadyRegistered] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
   const [emailError, setEmailError] = useState<string | undefined>();
+  const [whatsappSent, setWhatsappSent] = useState(false);
+  const [whatsappError, setWhatsappError] = useState<string | undefined>();
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -62,6 +64,8 @@ export default function RsvpPage() {
       setAlreadyRegistered(false);
       setEmailSent(Boolean(data.emailSent));
       setEmailError(data.emailError);
+      setWhatsappSent(Boolean(data.whatsappSent));
+      setWhatsappError(data.whatsappError);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
     } finally {
@@ -87,6 +91,8 @@ export default function RsvpPage() {
           guest={guest}
           emailSent={emailSent}
           emailError={emailError}
+          whatsappSent={whatsappSent}
+          whatsappError={whatsappError}
           alreadyRegistered={alreadyRegistered}
         />
       </main>
@@ -103,8 +109,8 @@ export default function RsvpPage() {
         <p className="mx-auto mt-4 max-w-lg text-muted-foreground">
           Kindly confirm your attendance for the wedding of {wedding.groom.name}{" "}
           and {wedding.bride.name} on {wedding.dateDisplay}. Each guest must
-          register individually with their own email — you&apos;ll receive a
-          unique QR pass for check-in at the venue.
+          register individually with their own email and WhatsApp number —
+          you&apos;ll receive a unique QR pass for check-in at the venue.
         </p>
       </FadeIn>
 
@@ -145,7 +151,7 @@ export default function RsvpPage() {
           </div>
           <div>
             <label htmlFor="phone" className="mb-1.5 block text-sm font-medium">
-              Phone *
+              WhatsApp number *
             </label>
             <input
               id="phone"

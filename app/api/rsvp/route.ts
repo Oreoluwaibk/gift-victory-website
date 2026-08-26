@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { sendQrPassEmail } from "@/lib/email/send-qr-pass";
+import { sendQrPassWhatsApp } from "@/lib/whatsapp/send-qr-pass";
 import { createGuest, DuplicateGuestError } from "@/lib/guest-store";
 
 export async function POST(request: Request) {
@@ -8,7 +9,7 @@ export async function POST(request: Request) {
 
     if (!body.fullName?.trim() || !body.email?.trim() || !body.phone?.trim()) {
       return NextResponse.json(
-        { error: "Full name, email, and phone are required." },
+        { error: "Full name, email, and WhatsApp number are required." },
         { status: 400 }
       );
     }
@@ -29,13 +30,18 @@ export async function POST(request: Request) {
       message: body.message,
     });
 
-    const emailResult = await sendQrPassEmail(guest);
+    const [emailResult, whatsappResult] = await Promise.all([
+      sendQrPassEmail(guest),
+      sendQrPassWhatsApp(guest),
+    ]);
 
     return NextResponse.json({
       guest,
       alreadyRegistered: false,
       emailSent: emailResult.sent,
       emailError: emailResult.error,
+      whatsappSent: whatsappResult.sent,
+      whatsappError: whatsappResult.error,
     });
   } catch (err) {
     if (err instanceof DuplicateGuestError) {

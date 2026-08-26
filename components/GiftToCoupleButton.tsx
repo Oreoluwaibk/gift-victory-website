@@ -49,7 +49,7 @@ export function GiftToCoupleButton({
 
   const layoutClass =
     variant === "nav"
-      ? "block w-full font-[family-name:var(--font-inter)] transition-colors md:inline md:w-auto"
+      ? "block w-full font-[family-name:var(--font-inter)] transition-colors md:inline md:w-auto text-left"
       : "inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 text-sm font-semibold transition-colors";
 
   return (
