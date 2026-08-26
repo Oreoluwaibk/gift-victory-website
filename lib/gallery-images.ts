@@ -22,7 +22,6 @@ const captions = [
 ];
 
 const togetherFiles = new Set([
-  "bride&groom.jpeg",
   "20251122_123807.jpg",
   "20251123_100033.jpg",
   "IMG-20260326-WA0017.jpg",
@@ -32,7 +31,6 @@ const togetherFiles = new Set([
 const files: { file: string; type: GalleryItem["type"] }[] = [
   { file: "20251122_123807.jpg", type: "image" },
   { file: "20251123_100033.jpg", type: "image" },
-  { file: "bride&groom.jpeg", type: "image" },
   { file: "groom1.jpeg", type: "image" },
   { file: "groom2.jpeg", type: "image" },
   { file: "victory-new-1.jpeg", type: "image" },
