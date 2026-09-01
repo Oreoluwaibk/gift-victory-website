@@ -32,8 +32,6 @@ export default function RsvpPage() {
   const [alreadyRegistered, setAlreadyRegistered] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
   const [emailError, setEmailError] = useState<string | undefined>();
-  const [whatsappSent, setWhatsappSent] = useState(false);
-  const [whatsappError, setWhatsappError] = useState<string | undefined>();
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -64,8 +62,6 @@ export default function RsvpPage() {
       setAlreadyRegistered(false);
       setEmailSent(Boolean(data.emailSent));
       setEmailError(data.emailError);
-      setWhatsappSent(Boolean(data.whatsappSent));
-      setWhatsappError(data.whatsappError);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
     } finally {
@@ -91,9 +87,8 @@ export default function RsvpPage() {
           guest={guest}
           emailSent={emailSent}
           emailError={emailError}
-          whatsappSent={whatsappSent}
-          whatsappError={whatsappError}
           alreadyRegistered={alreadyRegistered}
+          promptWhatsApp={!alreadyRegistered}
         />
       </main>
     );

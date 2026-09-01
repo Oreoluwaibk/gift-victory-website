@@ -27,7 +27,7 @@ export const wedding = {
       name: "White Wedding — RCCG Goodnews Zonal Headquarters",
       address:
         "RCCG, Goodnews Zonal Headquarters (Beside Christ High School), Oleyo Road, Tipper garage, Orita Challenge, Ibadan",
-      time: "11:00 AM",
+      time: "12:00 PM",
       mapQuery: "8RGV+2WG, Idi-Iroko/Ikereku 110115, Oyo, Nigeria",
     },
     reception: {
@@ -39,7 +39,7 @@ export const wedding = {
         "Light Magic Event Centre Julius Mojisola Street Odo-Ona Elewe Oluyole Ibadan",
     },
     parkingNotes:
-      "Parking is available at both venues. We recommend arriving early for the 10:00 AM ceremony. The reception at Light Magic Event Centre follows at 1:00 PM.",
+      "Parking is available at both venues. We recommend arriving early for the 12:00 PM ceremony. The reception at Light Magic Event Centre follows at 2:00 PM.",
   },
   story: {
     tagline:

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import QRCode from "qrcode";
 import { motion } from "framer-motion";
 import { Download, Mail, MessageCircle, QrCode } from "lucide-react";
@@ -11,9 +11,8 @@ type GuestQrCardProps = {
   guest: Guest;
   emailSent?: boolean;
   emailError?: string;
-  whatsappSent?: boolean;
-  whatsappError?: string;
   alreadyRegistered?: boolean;
+  promptWhatsApp?: boolean;
 };
 
 function toWhatsAppDigits(phone: string): string | null {
@@ -26,25 +25,30 @@ function toWhatsAppDigits(phone: string): string | null {
   return digits;
 }
 
-export function GuestQrCard({
-  guest,
-  emailSent,
-  emailError,
-  whatsappSent,
-  whatsappError,
-  alreadyRegistered,
-}: GuestQrCardProps) {
-  const [qrDataUrl, setQrDataUrl] = useState<string>("");
-  const checkInUrl = `${wedding.siteUrl}/check-in/${guest.code}`;
+function buildWhatsAppHref(guest: Guest, checkInUrl: string): string {
   const whatsappDigits = toWhatsAppDigits(guest.phone);
   const whatsappShareText = [
     `My Perfect Love wedding check-in pass`,
     checkInUrl,
     `Code: ${guest.code}`,
   ].join("\n");
-  const whatsappHref = whatsappDigits
+
+  return whatsappDigits
     ? `https://wa.me/${whatsappDigits}?text=${encodeURIComponent(whatsappShareText)}`
     : `https://wa.me/?text=${encodeURIComponent(whatsappShareText)}`;
+}
+
+export function GuestQrCard({
+  guest,
+  emailSent,
+  emailError,
+  alreadyRegistered,
+  promptWhatsApp = false,
+}: GuestQrCardProps) {
+  const [qrDataUrl, setQrDataUrl] = useState<string>("");
+  const whatsappOpened = useRef(false);
+  const checkInUrl = `${wedding.siteUrl}/check-in/${guest.code}`;
+  const whatsappHref = buildWhatsAppHref(guest, checkInUrl);
 
   useEffect(() => {
     QRCode.toDataURL(checkInUrl, {
@@ -53,6 +57,12 @@ export function GuestQrCard({
       color: { dark: "#4a148c", light: "#ffffff" },
     }).then(setQrDataUrl);
   }, [checkInUrl]);
+
+  useEffect(() => {
+    if (!promptWhatsApp || whatsappOpened.current) return;
+    whatsappOpened.current = true;
+    window.open(whatsappHref, "_blank", "noopener,noreferrer");
+  }, [promptWhatsApp, whatsappHref]);
 
   const downloadQr = () => {
     if (!qrDataUrl) return;
@@ -82,14 +92,25 @@ export function GuestQrCard({
           </>
         ) : (
           <>
-            {deliverySummary({
-              emailSent,
-              emailError,
-              whatsappSent,
-              whatsappError,
-              email: guest.email,
-              phone: guest.phone,
-            })}
+            {emailSent ? (
+              <>
+                Your QR pass has been emailed to{" "}
+                <span className="font-medium text-foreground">{guest.email}</span>.
+                Tap WhatsApp below to save it to{" "}
+                <span className="font-medium text-foreground">{guest.phone}</span>{" "}
+                as well.
+              </>
+            ) : emailError ? (
+              <>
+                We couldn&apos;t email your pass ({emailError}). Use WhatsApp or
+                download below to save it.
+              </>
+            ) : (
+              <>
+                Save your QR pass below. Tap WhatsApp to send it to{" "}
+                <span className="font-medium text-foreground">{guest.phone}</span>.
+              </>
+            )}{" "}
             Present it at the venue for seamless check-in.
           </>
         )}
@@ -121,24 +142,24 @@ export function GuestQrCard({
       </div>
 
       <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-        <button
-          type="button"
-          onClick={downloadQr}
-          disabled={!qrDataUrl}
-          className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-purple-deep px-5 py-3 text-sm font-semibold text-white transition hover:bg-purple-rich disabled:opacity-50"
-        >
-          <Download className="h-4 w-4" />
-          Download QR
-        </button>
         <a
           href={whatsappHref}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex flex-1 items-center justify-center gap-2 rounded-full border border-border px-5 py-3 text-sm font-semibold transition hover:border-purple-soft hover:text-purple-rich"
+          className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-purple-deep px-5 py-3 text-sm font-semibold text-white transition hover:bg-purple-rich"
         >
           <MessageCircle className="h-4 w-4" />
-          WhatsApp Pass
+          Send to WhatsApp
         </a>
+        <button
+          type="button"
+          onClick={downloadQr}
+          disabled={!qrDataUrl}
+          className="inline-flex flex-1 items-center justify-center gap-2 rounded-full border border-border px-5 py-3 text-sm font-semibold transition hover:border-purple-soft hover:text-purple-rich disabled:opacity-50"
+        >
+          <Download className="h-4 w-4" />
+          Download QR
+        </button>
         <a
           href={`mailto:${guest.email}?subject=${encodeURIComponent("Your Perfect Love Wedding QR Pass")}&body=${encodeURIComponent(`Your check-in link: ${checkInUrl}`)}`}
           className="inline-flex flex-1 items-center justify-center gap-2 rounded-full border border-border px-5 py-3 text-sm font-semibold transition hover:border-purple-soft hover:text-purple-rich"
@@ -148,64 +169,5 @@ export function GuestQrCard({
         </a>
       </div>
     </motion.div>
-  );
-}
-
-function deliverySummary({
-  emailSent,
-  emailError,
-  whatsappSent,
-  whatsappError,
-  email,
-  phone,
-}: {
-  emailSent?: boolean;
-  emailError?: string;
-  whatsappSent?: boolean;
-  whatsappError?: string;
-  email: string;
-  phone: string;
-}) {
-  const channels: string[] = [];
-  if (emailSent) channels.push(`email (${email})`);
-  if (whatsappSent) channels.push(`WhatsApp (${phone})`);
-
-  if (channels.length > 0) {
-    return (
-      <>
-        Your QR pass has been sent via {channels.join(" and ")}. You can also
-        save it below.{" "}
-        {!emailSent && emailError ? (
-          <span className="mt-2 block text-amber-600 dark:text-amber-400">
-            Email couldn&apos;t be sent ({emailError}).
-          </span>
-        ) : null}
-        {!whatsappSent && whatsappError ? (
-          <span className="mt-2 block text-amber-600 dark:text-amber-400">
-            WhatsApp couldn&apos;t be sent automatically ({whatsappError}). Use
-            the WhatsApp button below to save your pass.
-          </span>
-        ) : null}
-      </>
-    );
-  }
-
-  return (
-    <>
-      Save this QR code below.{" "}
-      {emailError || whatsappError ? (
-        <span className="mt-2 block text-amber-600 dark:text-amber-400">
-          We couldn&apos;t send your pass automatically
-          {emailError ? ` (email: ${emailError})` : ""}
-          {whatsappError ? ` (WhatsApp: ${whatsappError})` : ""}. Please
-          download it or use WhatsApp / email below.
-        </span>
-      ) : (
-        <>
-          It will also be available at{" "}
-          <span className="font-medium text-foreground">{email}</span>.
-        </>
-      )}{" "}
-    </>
   );
 }
