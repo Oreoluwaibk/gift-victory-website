@@ -11,16 +11,17 @@ function toWhatsAppDigits(phone: string): string | null {
   return digits;
 }
 
-export function buildWhatsAppText(guest: Guest, checkInUrl: string): string {
+export function buildWhatsAppText(guest: Guest): string {
   return [
     "My Perfect Love wedding check-in pass",
-    checkInUrl,
     `Code: ${guest.code}`,
+    "Save this image and show the QR code to the ushers at the venue.",
+    "Do not open the check-in link yourself — only the usher should scan your QR.",
   ].join("\n");
 }
 
-export function buildWhatsAppHref(guest: Guest, checkInUrl: string): string {
-  const text = buildWhatsAppText(guest, checkInUrl);
+export function buildWhatsAppHref(guest: Guest): string {
+  const text = buildWhatsAppText(guest);
   const digits = toWhatsAppDigits(guest.phone);
 
   return digits
@@ -40,7 +41,7 @@ export async function shareQrToWhatsApp(
   guest: Guest,
   checkInUrl: string
 ): Promise<"shared" | "fallback"> {
-  const text = buildWhatsAppText(guest, checkInUrl);
+  const text = buildWhatsAppText(guest);
   const filename = `perfect-love-pass-${guest.code}.png`;
 
   try {
@@ -61,7 +62,7 @@ export async function shareQrToWhatsApp(
     }
   }
 
-  window.open(buildWhatsAppHref(guest, checkInUrl), "_blank", "noopener,noreferrer");
+  window.open(buildWhatsAppHref(guest), "_blank", "noopener,noreferrer");
   return "fallback";
 }
 

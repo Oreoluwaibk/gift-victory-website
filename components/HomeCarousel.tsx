@@ -64,16 +64,18 @@ export function HomeCarousel() {
               priority={index === 0}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-            <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6">
-              <motion.p
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-                className="font-display text-lg font-semibold text-white sm:text-xl"
-              >
-                {current.caption}
-              </motion.p>
-            </div>
+            {current.caption ? (
+              <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6">
+                <motion.p
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+                  className="font-display text-lg font-semibold text-white sm:text-xl"
+                >
+                  {current.caption}
+                </motion.p>
+              </div>
+            ) : null}
           </motion.div>
         </AnimatePresence>
 

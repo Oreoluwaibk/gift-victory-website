@@ -83,7 +83,11 @@ export default function GalleryPage() {
               <GalleryMedia item={item} priority={index < 3} />
               <div className="absolute inset-0 flex items-end bg-gradient-to-t from-black/60 via-transparent to-transparent p-4 opacity-0 transition group-hover:opacity-100">
                 <div className="flex w-full items-center justify-between text-white">
-                  <span className="text-sm font-medium">{item.caption}</span>
+                  {item.caption ? (
+                    <span className="text-sm font-medium">{item.caption}</span>
+                  ) : (
+                    <span />
+                  )}
                   {item.type === "video" ? (
                     <Play className="h-4 w-4 fill-current" />
                   ) : (
@@ -141,12 +145,14 @@ export default function GalleryPage() {
                 </div>
               )}
 
-              <div className="bg-card px-6 py-4">
-                <p className="font-display text-xl font-semibold">
-                  {selected.caption}
-                </p>
-                <p className="mt-1 text-sm text-muted-foreground">{selected.alt}</p>
-              </div>
+              {selected.caption ? (
+                <div className="bg-card px-6 py-4">
+                  <p className="font-display text-xl font-semibold">
+                    {selected.caption}
+                  </p>
+                  <p className="mt-1 text-sm text-muted-foreground">{selected.alt}</p>
+                </div>
+              ) : null}
             </motion.div>
           </motion.div>
         )}

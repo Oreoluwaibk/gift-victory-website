@@ -66,63 +66,23 @@ export default function StoryPage() {
 
         {portraits.brideGallery.length > 0 && (
           <FadeIn delay={0.1} className="mt-10">
-            <p className="mb-5 text-center text-sm font-semibold uppercase tracking-[0.25em] text-purple-rich">
-              The Bride
-            </p>
             <div className="grid gap-6 sm:grid-cols-2">
               {portraits.brideGallery.map((photo) => (
-                <div
-                  key={photo.src}
-                  className="card-surface overflow-hidden rounded-3xl ring-2 ring-purple-soft/20"
-                >
-                  <div className="relative aspect-[4/5]">
-                    <Image
-                      src={photo.src}
-                      alt={photo.alt}
-                      fill
-                      sizes="(max-width: 640px) 100vw, 50vw"
-                      className="object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-                    <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
-                      <p className="font-display text-lg font-semibold">
-                        {bride.shortName}
-                      </p>
-                    </div>
-                  </div>
-                </div>
+                <StoryPhoto key={photo.src} src={photo.src} alt={photo.alt} />
               ))}
             </div>
           </FadeIn>
         )}
 
         <FadeIn delay={0.15} className="mt-10">
-          <p className="mb-5 text-center text-sm font-semibold uppercase tracking-[0.25em] text-purple-rich">
-            Together
-          </p>
           <div className="grid gap-6 sm:grid-cols-2">
             {portraits.together.map((photo, index) => (
-              <div
+              <StoryPhoto
                 key={photo.src}
-                className="card-surface overflow-hidden rounded-3xl ring-2 ring-purple-soft/20"
-              >
-                <div className="relative aspect-[4/5]">
-                  <Image
-                    src={photo.src}
-                    alt={photo.alt}
-                    fill
-                    sizes="(max-width: 640px) 100vw, 50vw"
-                    className="object-cover"
-                    priority={index === 0}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-                  <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
-                    <p className="font-display text-lg font-semibold">
-                      {groom.shortName} & {bride.shortName}
-                    </p>
-                  </div>
-                </div>
-              </div>
+                src={photo.src}
+                alt={photo.alt}
+                priority={index === 0}
+              />
             ))}
           </div>
         </FadeIn>
@@ -208,6 +168,31 @@ export default function StoryPage() {
         </FadeIn>
       </section>
     </main>
+  );
+}
+
+function StoryPhoto({
+  src,
+  alt,
+  priority = false,
+}: {
+  src: string;
+  alt: string;
+  priority?: boolean;
+}) {
+  return (
+    <div className="card-surface overflow-hidden rounded-3xl ring-2 ring-purple-soft/20">
+      <div className="relative aspect-[4/5]">
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          sizes="(max-width: 640px) 100vw, 50vw"
+          className="object-cover"
+          priority={priority}
+        />
+      </div>
+    </div>
   );
 }
 

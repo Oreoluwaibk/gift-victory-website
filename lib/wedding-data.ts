@@ -60,15 +60,15 @@ export const wedding = {
       },
       brideGallery: bridePhotos.more.map((file) => ({
         src: giftSrc(file),
-        alt: "Victory Ngozichukwu Elikwu",
+        alt: "Wedding photo",
       })),
       hero: {
         src: giftSrc(couplePhotos.hero),
-        alt: "Gift and Victory together",
+        alt: "Wedding photo",
       },
       together: couplePhotos.together.map((file) => ({
         src: giftSrc(file),
-        alt: "Gift and Victory together",
+        alt: "Wedding photo",
       })),
     },
     verses: [
