@@ -1,6 +1,7 @@
 import QRCode from "qrcode";
 import { Resend } from "resend";
 import type { Guest } from "@/lib/guest-store";
+import { buildCheckInUrl } from "@/lib/site-url";
 import { wedding } from "@/lib/wedding-data";
 import { formatResendError, getResendConfig } from "./config";
 
@@ -19,7 +20,7 @@ export async function sendQrPassEmail(guest: Guest): Promise<SendQrEmailResult> 
 
   const resend = new Resend(apiKey);
   const sender = fromEmail ?? "Perfect Love Wedding <onboarding@resend.dev>";
-  const checkInUrl = `${wedding.siteUrl}/check-in/${guest.code}`;
+  const checkInUrl = buildCheckInUrl(guest.code);
 
   const qrBuffer = await QRCode.toBuffer(checkInUrl, {
     width: 400,

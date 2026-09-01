@@ -10,3 +10,4 @@
 # Set these in the Netlify dashboard (Site settings → Environment variables):
 # RESEND_API_KEY       — from https://resend.com/api-keys
 # RESEND_FROM_EMAIL    — e.g. Perfect Love Wedding <onboarding@resend.dev> or your verified domain
+# NEXT_PUBLIC_SITE_URL — only if using a custom domain (Netlify sets URL automatically otherwise)

@@ -1,4 +1,5 @@
 import { bridePhotos, couplePhotos, giftSrc } from "./gift-images";
+import { getServerSiteUrl } from "./site-url";
 
 export const wedding = {
   groom: {
@@ -14,7 +15,7 @@ export const wedding = {
   dateDisplay: "Saturday, 21 November 2026",
   eventTitle: "White Wedding",
   venue: "Ibadan, Nigeria",
-  siteUrl: "https://perfect-love26.netlify.app",
+  siteUrl: getServerSiteUrl(),
   location: {
     confirmed: true,
     city: "Ibadan",

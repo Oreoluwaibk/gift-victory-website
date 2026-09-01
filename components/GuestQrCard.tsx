@@ -3,9 +3,12 @@
 import { useEffect, useRef, useState } from "react";
 import QRCode from "qrcode";
 import { motion } from "framer-motion";
-import { Download, Mail, MessageCircle, QrCode } from "lucide-react";
+import { Download, Loader2, Mail, MessageCircle, QrCode } from "lucide-react";
 import type { Guest } from "@/lib/guest-store";
-import { wedding } from "@/lib/wedding-data";
+import {
+  getClientCheckInUrl,
+  shareQrToWhatsApp,
+} from "@/lib/share-qr-whatsapp";
 
 type GuestQrCardProps = {
   guest: Guest;
@@ -15,29 +18,6 @@ type GuestQrCardProps = {
   promptWhatsApp?: boolean;
 };
 
-function toWhatsAppDigits(phone: string): string | null {
-  let digits = phone.replace(/\D/g, "");
-  if (!digits) return null;
-  if (digits.startsWith("0") && digits.length >= 10) {
-    digits = `234${digits.slice(1)}`;
-  }
-  if (digits.length < 10 || digits.length > 15) return null;
-  return digits;
-}
-
-function buildWhatsAppHref(guest: Guest, checkInUrl: string): string {
-  const whatsappDigits = toWhatsAppDigits(guest.phone);
-  const whatsappShareText = [
-    `My Perfect Love wedding check-in pass`,
-    checkInUrl,
-    `Code: ${guest.code}`,
-  ].join("\n");
-
-  return whatsappDigits
-    ? `https://wa.me/${whatsappDigits}?text=${encodeURIComponent(whatsappShareText)}`
-    : `https://wa.me/?text=${encodeURIComponent(whatsappShareText)}`;
-}
-
 export function GuestQrCard({
   guest,
   emailSent,
@@ -46,23 +26,38 @@ export function GuestQrCard({
   promptWhatsApp = false,
 }: GuestQrCardProps) {
   const [qrDataUrl, setQrDataUrl] = useState<string>("");
-  const whatsappOpened = useRef(false);
-  const checkInUrl = `${wedding.siteUrl}/check-in/${guest.code}`;
-  const whatsappHref = buildWhatsAppHref(guest, checkInUrl);
+  const [sharingWhatsApp, setSharingWhatsApp] = useState(false);
+  const [checkInUrl, setCheckInUrl] = useState(() => getClientCheckInUrl(guest.code));
+  const whatsappPrompted = useRef(false);
+
+  useEffect(() => {
+    setCheckInUrl(getClientCheckInUrl(guest.code));
+  }, [guest.code]);
 
   useEffect(() => {
     QRCode.toDataURL(checkInUrl, {
-      width: 280,
+      width: 400,
       margin: 2,
       color: { dark: "#4a148c", light: "#ffffff" },
     }).then(setQrDataUrl);
   }, [checkInUrl]);
 
+  const sendToWhatsApp = async () => {
+    if (!qrDataUrl) return;
+    setSharingWhatsApp(true);
+    try {
+      await shareQrToWhatsApp(qrDataUrl, guest, checkInUrl);
+    } finally {
+      setSharingWhatsApp(false);
+    }
+  };
+
   useEffect(() => {
-    if (!promptWhatsApp || whatsappOpened.current) return;
-    whatsappOpened.current = true;
-    window.open(whatsappHref, "_blank", "noopener,noreferrer");
-  }, [promptWhatsApp, whatsappHref]);
+    if (!promptWhatsApp || !qrDataUrl || whatsappPrompted.current) return;
+    whatsappPrompted.current = true;
+    void sendToWhatsApp();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [promptWhatsApp, qrDataUrl]);
 
   const downloadQr = () => {
     if (!qrDataUrl) return;
@@ -96,9 +91,8 @@ export function GuestQrCard({
               <>
                 Your QR pass has been emailed to{" "}
                 <span className="font-medium text-foreground">{guest.email}</span>.
-                Tap WhatsApp below to save it to{" "}
-                <span className="font-medium text-foreground">{guest.phone}</span>{" "}
-                as well.
+                Tap WhatsApp below to send the QR image to{" "}
+                <span className="font-medium text-foreground">{guest.phone}</span>.
               </>
             ) : emailError ? (
               <>
@@ -107,7 +101,7 @@ export function GuestQrCard({
               </>
             ) : (
               <>
-                Save your QR pass below. Tap WhatsApp to send it to{" "}
+                Tap WhatsApp below to send your QR image to{" "}
                 <span className="font-medium text-foreground">{guest.phone}</span>.
               </>
             )}{" "}
@@ -142,15 +136,19 @@ export function GuestQrCard({
       </div>
 
       <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-        <a
-          href={whatsappHref}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-purple-deep px-5 py-3 text-sm font-semibold text-white transition hover:bg-purple-rich"
+        <button
+          type="button"
+          onClick={sendToWhatsApp}
+          disabled={!qrDataUrl || sharingWhatsApp}
+          className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-purple-deep px-5 py-3 text-sm font-semibold text-white transition hover:bg-purple-rich disabled:opacity-50"
         >
-          <MessageCircle className="h-4 w-4" />
-          Send to WhatsApp
-        </a>
+          {sharingWhatsApp ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <MessageCircle className="h-4 w-4" />
+          )}
+          Send QR to WhatsApp
+        </button>
         <button
           type="button"
           onClick={downloadQr}
