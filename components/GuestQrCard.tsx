@@ -3,8 +3,9 @@
 import { useEffect, useRef, useState } from "react";
 import QRCode from "qrcode";
 import { motion } from "framer-motion";
-import { Download, Loader2, Mail, MessageCircle, QrCode } from "lucide-react";
+import { Download, Loader2, MessageCircle, QrCode } from "lucide-react";
 import type { Guest } from "@/lib/guest-store";
+import { generateQrPassImage } from "@/lib/qr-pass-image";
 import {
   getClientCheckInUrl,
   shareQrToWhatsApp,
@@ -12,21 +13,19 @@ import {
 
 type GuestQrCardProps = {
   guest: Guest;
-  emailSent?: boolean;
-  emailError?: string;
   alreadyRegistered?: boolean;
   promptWhatsApp?: boolean;
 };
 
 export function GuestQrCard({
   guest,
-  emailSent,
-  emailError,
   alreadyRegistered,
   promptWhatsApp = false,
 }: GuestQrCardProps) {
   const [qrDataUrl, setQrDataUrl] = useState<string>("");
+  const [passImageUrl, setPassImageUrl] = useState<string>("");
   const [sharingWhatsApp, setSharingWhatsApp] = useState(false);
+  const [downloading, setDownloading] = useState(false);
   const [checkInUrl, setCheckInUrl] = useState(() => getClientCheckInUrl(guest.code));
   const whatsappPrompted = useRef(false);
 
@@ -42,29 +41,53 @@ export function GuestQrCard({
     }).then(setQrDataUrl);
   }, [checkInUrl]);
 
+  useEffect(() => {
+    if (!checkInUrl) return;
+    generateQrPassImage({
+      guestName: guest.fullName,
+      code: guest.code,
+      checkInUrl,
+    }).then(setPassImageUrl);
+  }, [checkInUrl, guest.fullName, guest.code]);
+
+  const shareImageUrl = passImageUrl || qrDataUrl;
+
   const sendToWhatsApp = async () => {
-    if (!qrDataUrl) return;
+    if (!shareImageUrl) return;
     setSharingWhatsApp(true);
     try {
-      await shareQrToWhatsApp(qrDataUrl, guest, checkInUrl);
+      await shareQrToWhatsApp(shareImageUrl, guest, checkInUrl);
     } finally {
       setSharingWhatsApp(false);
     }
   };
 
   useEffect(() => {
-    if (!promptWhatsApp || !qrDataUrl || whatsappPrompted.current) return;
+    if (!promptWhatsApp || !shareImageUrl || whatsappPrompted.current) return;
     whatsappPrompted.current = true;
     void sendToWhatsApp();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [promptWhatsApp, qrDataUrl]);
+  }, [promptWhatsApp, shareImageUrl]);
 
-  const downloadQr = () => {
-    if (!qrDataUrl) return;
-    const link = document.createElement("a");
-    link.href = qrDataUrl;
-    link.download = `perfect-love-rsvp-${guest.code}.png`;
-    link.click();
+  const downloadQr = async () => {
+    if (!shareImageUrl) return;
+    setDownloading(true);
+    try {
+      const imageUrl =
+        passImageUrl ||
+        (await generateQrPassImage({
+          guestName: guest.fullName,
+          code: guest.code,
+          checkInUrl,
+        }));
+
+      const link = document.createElement("a");
+      link.href = imageUrl;
+      link.download = `perfect-love-pass-${guest.code}.png`;
+      link.click();
+    } finally {
+      setDownloading(false);
+    }
   };
 
   return (
@@ -81,31 +104,14 @@ export function GuestQrCard({
       <p className="mb-6 text-sm leading-relaxed text-muted-foreground">
         {alreadyRegistered ? (
           <>
-            You have already confirmed with{" "}
-            <span className="font-medium text-foreground">{guest.email}</span>.
-            Save or download your existing QR pass below for check-in at the venue.
+            You have already confirmed with this email. Save or download your
+            existing QR pass below for check-in at the venue.
           </>
         ) : (
           <>
-            {emailSent ? (
-              <>
-                Your QR pass has been emailed to{" "}
-                <span className="font-medium text-foreground">{guest.email}</span>.
-                Tap WhatsApp below to send the QR image to{" "}
-                <span className="font-medium text-foreground">{guest.phone}</span>.
-              </>
-            ) : emailError ? (
-              <>
-                We couldn&apos;t email your pass ({emailError}). Use WhatsApp or
-                download below to save it.
-              </>
-            ) : (
-              <>
-                Tap WhatsApp below to send your QR image to{" "}
-                <span className="font-medium text-foreground">{guest.phone}</span>.
-              </>
-            )}{" "}
-            Present it at the venue for seamless check-in.
+            Tap WhatsApp to send your pass image to{" "}
+            <span className="font-medium text-foreground">{guest.phone}</span>,
+            or download it below. Each link works only once at the venue.
           </>
         )}
       </p>
@@ -126,6 +132,18 @@ export function GuestQrCard({
           </div>
         )}
         <p className="mt-3 font-mono text-xs text-muted-foreground">{guest.code}</p>
+        <p className="mt-2 max-w-[280px] break-all text-center text-xs text-muted-foreground">
+          {checkInUrl}
+        </p>
+      </div>
+
+      <div className="mb-6 rounded-xl bg-muted/60 p-4 text-sm leading-relaxed text-muted-foreground">
+        <p className="font-medium text-foreground">How to use your pass</p>
+        <ol className="mt-2 list-decimal space-y-1 pl-4">
+          <li>Download or save the pass image on your phone.</li>
+          <li>Show the QR code to the ushers when you arrive.</li>
+          <li>Your check-in link works only once — keep it private.</li>
+        </ol>
       </div>
 
       <div className="space-y-2 rounded-xl bg-muted/60 p-4 text-sm">
@@ -135,11 +153,11 @@ export function GuestQrCard({
         </p>
       </div>
 
-      <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+      <div className="mt-6 flex flex-col gap-3 sm:flex-row">
         <button
           type="button"
           onClick={sendToWhatsApp}
-          disabled={!qrDataUrl || sharingWhatsApp}
+          disabled={!shareImageUrl || sharingWhatsApp}
           className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-purple-deep px-5 py-3 text-sm font-semibold text-white transition hover:bg-purple-rich disabled:opacity-50"
         >
           {sharingWhatsApp ? (
@@ -152,19 +170,16 @@ export function GuestQrCard({
         <button
           type="button"
           onClick={downloadQr}
-          disabled={!qrDataUrl}
+          disabled={!shareImageUrl || downloading}
           className="inline-flex flex-1 items-center justify-center gap-2 rounded-full border border-border px-5 py-3 text-sm font-semibold transition hover:border-purple-soft hover:text-purple-rich disabled:opacity-50"
         >
-          <Download className="h-4 w-4" />
-          Download QR
+          {downloading ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <Download className="h-4 w-4" />
+          )}
+          Download Pass
         </button>
-        <a
-          href={`mailto:${guest.email}?subject=${encodeURIComponent("Your Perfect Love Wedding QR Pass")}&body=${encodeURIComponent(`Your check-in link: ${checkInUrl}`)}`}
-          className="inline-flex flex-1 items-center justify-center gap-2 rounded-full border border-border px-5 py-3 text-sm font-semibold transition hover:border-purple-soft hover:text-purple-rich"
-        >
-          <Mail className="h-4 w-4" />
-          Email Pass
-        </a>
       </div>
     </motion.div>
   );

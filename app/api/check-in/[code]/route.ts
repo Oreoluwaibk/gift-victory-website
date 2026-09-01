@@ -13,13 +13,16 @@ export async function POST(_request: Request, context: RouteContext) {
       return NextResponse.json({ error: "Invalid code." }, { status: 400 });
     }
 
-    const guest = await checkInGuest(code.trim());
+    const result = await checkInGuest(code.trim());
 
-    if (!guest) {
+    if (!result) {
       return NextResponse.json({ error: "Guest not found." }, { status: 404 });
     }
 
-    return NextResponse.json({ guest });
+    return NextResponse.json({
+      guest: result.guest,
+      alreadyCheckedIn: result.alreadyCheckedIn,
+    });
   } catch {
     return NextResponse.json(
       { error: "Unable to verify guest." },
@@ -38,7 +41,10 @@ export async function GET(_request: Request, context: RouteContext) {
       return NextResponse.json({ error: "Guest not found." }, { status: 404 });
     }
 
-    return NextResponse.json({ guest });
+    return NextResponse.json({
+      guest,
+      alreadyCheckedIn: Boolean(guest.checkedInAt),
+    });
   } catch {
     return NextResponse.json(
       { error: "Unable to look up guest." },

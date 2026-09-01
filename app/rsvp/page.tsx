@@ -30,8 +30,6 @@ export default function RsvpPage() {
   const [error, setError] = useState("");
   const [guest, setGuest] = useState<Guest | null>(null);
   const [alreadyRegistered, setAlreadyRegistered] = useState(false);
-  const [emailSent, setEmailSent] = useState(false);
-  const [emailError, setEmailError] = useState<string | undefined>();
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -60,8 +58,6 @@ export default function RsvpPage() {
 
       setGuest(data.guest);
       setAlreadyRegistered(false);
-      setEmailSent(Boolean(data.emailSent));
-      setEmailError(data.emailError);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
     } finally {
@@ -85,8 +81,6 @@ export default function RsvpPage() {
         </FadeIn>
         <GuestQrCard
           guest={guest}
-          emailSent={emailSent}
-          emailError={emailError}
           alreadyRegistered={alreadyRegistered}
           promptWhatsApp={!alreadyRegistered}
         />

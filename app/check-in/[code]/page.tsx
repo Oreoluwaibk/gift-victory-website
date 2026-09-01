@@ -19,6 +19,7 @@ export default function CheckInPage() {
   const code = params.code;
   const [loading, setLoading] = useState(true);
   const [guest, setGuest] = useState<Guest | null>(null);
+  const [alreadyCheckedIn, setAlreadyCheckedIn] = useState(false);
   const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
@@ -32,6 +33,7 @@ export default function CheckInPage() {
           return;
         }
         setGuest(data.guest);
+        setAlreadyCheckedIn(Boolean(data.alreadyCheckedIn));
       })
       .catch(() => setNotFound(true))
       .finally(() => setLoading(false));
@@ -66,7 +68,62 @@ export default function CheckInPage() {
     );
   }
 
-  const isCheckedIn = Boolean(guest.checkedInAt);
+  if (alreadyCheckedIn) {
+    return (
+      <main className="mx-auto max-w-lg px-4 py-12 sm:px-6">
+        <FadeIn className="text-center">
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ type: "spring", stiffness: 200, damping: 15 }}
+            className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-amber-500/15 text-amber-600"
+          >
+            <AlertCircle className="h-10 w-10" />
+          </motion.div>
+
+          <h1 className="font-display text-3xl font-bold sm:text-4xl">
+            Already Checked In
+          </h1>
+          <p className="mt-3 text-muted-foreground">
+            You have already been checked in. This link has already been used and
+            cannot be used again.
+          </p>
+        </FadeIn>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="card-surface mt-8 space-y-4 rounded-3xl p-6 sm:p-8"
+        >
+          <div className="flex items-center gap-3 border-b border-border pb-4">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-purple-deep text-lg font-bold text-white">
+              {guest.fullName.charAt(0)}
+            </div>
+            <div>
+              <p className="font-display text-xl font-semibold">{guest.fullName}</p>
+              <p className="text-sm text-muted-foreground">Entry pass used</p>
+            </div>
+          </div>
+
+          <div className="rounded-xl bg-muted/60 p-4 text-sm">
+            <CheckCircle2 className="mb-2 h-5 w-5 text-amber-600" />
+            <p className="text-muted-foreground">Status</p>
+            <p className="text-lg font-semibold">Checked in previously</p>
+            {guest.checkedInAt && (
+              <p className="mt-1 text-xs text-muted-foreground">
+                {new Date(guest.checkedInAt).toLocaleString()}
+              </p>
+            )}
+          </div>
+
+          <p className="text-center text-xs text-muted-foreground">
+            {wedding.groom.shortName} & {wedding.bride.shortName} · {wedding.hashtag}
+          </p>
+        </motion.div>
+      </main>
+    );
+  }
 
   return (
     <main className="mx-auto max-w-lg px-4 py-12 sm:px-6">
@@ -75,24 +132,14 @@ export default function CheckInPage() {
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ type: "spring", stiffness: 200, damping: 15 }}
-          className={`mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full ${
-            isCheckedIn ? "bg-green-500/15 text-green-600" : "bg-purple-rich/15 text-purple-rich"
-          }`}
+          className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-green-500/15 text-green-600"
         >
-          {isCheckedIn ? (
-            <CheckCircle2 className="h-10 w-10" />
-          ) : (
-            <UserCheck className="h-10 w-10" />
-          )}
+          <CheckCircle2 className="h-10 w-10" />
         </motion.div>
 
-        <h1 className="font-display text-3xl font-bold sm:text-4xl">
-          {isCheckedIn ? "Welcome!" : "Guest Verified"}
-        </h1>
+        <h1 className="font-display text-3xl font-bold sm:text-4xl">Welcome!</h1>
         <p className="mt-2 text-muted-foreground">
-          {isCheckedIn
-            ? "You have been checked in successfully."
-            : "Registration confirmed — enjoy the celebration!"}
+          You have been checked in successfully. Enjoy the celebration!
         </p>
       </FadeIn>
 
@@ -113,10 +160,10 @@ export default function CheckInPage() {
         </div>
 
         <div className="rounded-xl bg-muted/60 p-4 text-sm">
-          <CheckCircle2 className="mb-2 h-5 w-5 text-purple-rich" />
+          <UserCheck className="mb-2 h-5 w-5 text-green-600" />
           <p className="text-muted-foreground">Status</p>
-          <p className="text-lg font-semibold">
-            {isCheckedIn ? "Checked in" : "Registered"}
+          <p className="text-lg font-semibold text-green-700 dark:text-green-400">
+            Checked in
           </p>
         </div>
 

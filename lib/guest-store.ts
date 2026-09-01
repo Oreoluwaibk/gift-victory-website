@@ -120,12 +120,16 @@ export async function getGuestByCode(code: string): Promise<Guest | null> {
   return guests.find((g) => g.code === code) ?? null;
 }
 
-export async function checkInGuest(code: string): Promise<Guest | null> {
+export async function checkInGuest(
+  code: string
+): Promise<{ guest: Guest; alreadyCheckedIn: boolean } | null> {
   const guests = await getAllGuests();
   const index = guests.findIndex((g) => g.code === code);
   if (index === -1) return null;
 
-  if (!guests[index].checkedInAt) {
+  const alreadyCheckedIn = Boolean(guests[index].checkedInAt);
+
+  if (!alreadyCheckedIn) {
     guests[index] = {
       ...guests[index],
       checkedInAt: new Date().toISOString(),
@@ -133,5 +137,5 @@ export async function checkInGuest(code: string): Promise<Guest | null> {
     await saveAllGuests(guests);
   }
 
-  return guests[index];
+  return { guest: guests[index], alreadyCheckedIn };
 }
