@@ -1,4 +1,4 @@
-import { giftSrc } from "./gift-images";
+import { giftSrc, publicSrc } from "./gift-images";
 
 export type GalleryItem = {
   id: number;
@@ -8,43 +8,40 @@ export type GalleryItem = {
   type: "image" | "video";
 };
 
-const groomFiles = new Set(["groom1.jpeg"]);
-const brideFiles = new Set(["victory-new-2.jpeg"]);
+type GalleryFile = {
+  src: string;
+  type: GalleryItem["type"];
+};
 
-const files: { file: string; type: GalleryItem["type"] }[] = [
-  { file: "20251122_123807.jpg", type: "image" },
-  { file: "20251123_100033.jpg", type: "image" },
-  { file: "groom1.jpeg", type: "image" },
-  { file: "victory-new-2.jpeg", type: "image" },
-  { file: "t1.jpeg", type: "image" },
-  { file: "t2.jpeg", type: "image" },
-  { file: "t3.jpeg", type: "image" },
-  { file: "t5.jpeg", type: "image" },
-  { file: "IMG-20260326-WA0017.jpg", type: "image" },
+const files: GalleryFile[] = [
+  { src: giftSrc("20251122_123807.jpg"), type: "image" },
+  { src: giftSrc("20251123_100033.jpg"), type: "image" },
+  { src: publicSrc("t12.jpeg"), type: "image" },
+  { src: publicSrc("t22.jpeg"), type: "image" },
+  { src: giftSrc("groom1.jpeg"), type: "image" },
+  { src: giftSrc("t5.jpeg"), type: "image" },
+  { src: giftSrc("victory-new-2.jpeg"), type: "image" },
+  { src: giftSrc("IMG-20260326-WA0017.jpg"), type: "image" },
 ];
 
-function getCaption(file: string): string {
-  if (groomFiles.has(file)) return "The Groom";
-  if (brideFiles.has(file)) return "The Bride";
+function getCaption(src: string): string {
+  if (src.includes("victory-new-2.jpeg")) return "The Bride";
   return "";
 }
 
-function getAlt(file: string, caption: string): string {
-  if (groomFiles.has(file)) {
-    return `Gift Oladipo Gureje — ${caption}`;
-  }
-  if (brideFiles.has(file)) {
+function getAlt(src: string, caption: string): string {
+  if (caption === "The Bride") {
     return `Victory Ngozichukwu Elikwu — ${caption}`;
   }
   return "Wedding gallery photo";
 }
 
-export const gallery: GalleryItem[] = files.map(({ file, type }, index) => {
-  const caption = getCaption(file);
+export const gallery: GalleryItem[] = files.map(({ src, type }, index) => {
+  const caption = getCaption(src);
   return {
     id: index + 1,
-    src: giftSrc(file),
-    alt: getAlt(file, caption),
+    src,
+    alt: getAlt(src, caption),
     caption,
     type,
   };

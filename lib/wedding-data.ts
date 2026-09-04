@@ -1,4 +1,4 @@
-import { bridePhotos, couplePhotos, giftSrc } from "./gift-images";
+import { bridePhotos, couplePhotos, giftSrc, groomPhotos } from "./gift-images";
 import { getServerSiteUrl } from "./site-url";
 
 export const wedding = {
@@ -51,7 +51,7 @@ export const wedding = {
       "They met in Ile-Ife, grew from friendship into courtship, and now invite you to celebrate their wedding with them.",
     portraits: {
       groom: {
-        src: giftSrc("groom1.jpeg"),
+        src: groomPhotos.portrait,
         alt: "Gift Oladipo Gureje",
       },
       bride: {
