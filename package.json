@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@netlify/blobs": "^10.7.9",
+    "@supabase/supabase-js": "^2.109.0",
     "framer-motion": "^12.40.0",
     "lucide-react": "^1.21.0",
     "nanoid": "^5.1.14",

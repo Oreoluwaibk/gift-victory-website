@@ -2,6 +2,11 @@ import { getStore } from "@netlify/blobs";
 import { nanoid } from "nanoid";
 import { promises as fs } from "fs";
 import path from "path";
+import {
+  getSupabaseAdmin,
+  isSupabaseConfigured,
+  type GuestRow,
+} from "@/lib/supabase/admin-client";
 
 export type Guest = {
   id: string;
@@ -18,6 +23,36 @@ export type Guest = {
 
 const STORE_NAME = "wedding-guests";
 const LOCAL_FILE = path.join(process.cwd(), "data", "guests.json");
+
+function rowToGuest(row: GuestRow): Guest {
+  return {
+    id: row.id,
+    code: row.code,
+    fullName: row.full_name,
+    email: row.email,
+    phone: row.phone,
+    guestsCount: row.guests_count,
+    dietaryNotes: row.dietary_notes,
+    message: row.message,
+    registeredAt: row.registered_at,
+    checkedInAt: row.checked_in_at,
+  };
+}
+
+function guestToRow(guest: Guest): GuestRow {
+  return {
+    id: guest.id,
+    code: guest.code,
+    full_name: guest.fullName,
+    email: guest.email,
+    phone: guest.phone,
+    guests_count: guest.guestsCount,
+    dietary_notes: guest.dietaryNotes,
+    message: guest.message,
+    registered_at: guest.registeredAt,
+    checked_in_at: guest.checkedInAt,
+  };
+}
 
 async function readLocalGuests(): Promise<Guest[]> {
   try {
@@ -48,19 +83,33 @@ function useNetlifyBlobs(): boolean {
   return Boolean(process.env.NETLIFY || process.env.NETLIFY_BLOBS_CONTEXT);
 }
 
-async function getAllGuests(): Promise<Guest[]> {
+async function getAllGuestsLegacy(): Promise<Guest[]> {
   if (useNetlifyBlobs()) {
     return readBlobGuests();
   }
   return readLocalGuests();
 }
 
-async function saveAllGuests(guests: Guest[]): Promise<void> {
+async function saveAllGuestsLegacy(guests: Guest[]): Promise<void> {
   if (useNetlifyBlobs()) {
     await writeBlobGuests(guests);
     return;
   }
   await writeLocalGuests(guests);
+}
+
+async function getAllGuestsFromSupabase(): Promise<Guest[]> {
+  const supabase = getSupabaseAdmin();
+  const { data, error } = await supabase
+    .from("guests")
+    .select("*")
+    .order("registered_at", { ascending: false });
+
+  if (error) {
+    throw error;
+  }
+
+  return (data as GuestRow[]).map(rowToGuest);
 }
 
 export type CreateGuestInput = {
@@ -82,17 +131,42 @@ export class DuplicateGuestError extends Error {
   }
 }
 
+export async function listGuests(): Promise<Guest[]> {
+  if (isSupabaseConfigured()) {
+    return getAllGuestsFromSupabase();
+  }
+  const guests = await getAllGuestsLegacy();
+  return guests.sort(
+    (a, b) =>
+      new Date(b.registeredAt).getTime() - new Date(a.registeredAt).getTime()
+  );
+}
+
 export async function getGuestByEmail(email: string): Promise<Guest | null> {
-  const guests = await getAllGuests();
   const normalizedEmail = email.trim().toLowerCase();
+
+  if (isSupabaseConfigured()) {
+    const supabase = getSupabaseAdmin();
+    const { data, error } = await supabase
+      .from("guests")
+      .select("*")
+      .eq("email", normalizedEmail)
+      .maybeSingle();
+
+    if (error) {
+      throw error;
+    }
+
+    return data ? rowToGuest(data as GuestRow) : null;
+  }
+
+  const guests = await getAllGuestsLegacy();
   return guests.find((g) => g.email === normalizedEmail) ?? null;
 }
 
 export async function createGuest(input: CreateGuestInput): Promise<Guest> {
-  const guests = await getAllGuests();
   const normalizedEmail = input.email.trim().toLowerCase();
-
-  const existing = guests.find((g) => g.email === normalizedEmail);
+  const existing = await getGuestByEmail(normalizedEmail);
   if (existing) {
     throw new DuplicateGuestError(existing);
   }
@@ -110,20 +184,85 @@ export async function createGuest(input: CreateGuestInput): Promise<Guest> {
     checkedInAt: null,
   };
 
+  if (isSupabaseConfigured()) {
+    const supabase = getSupabaseAdmin();
+    const { data, error } = await supabase
+      .from("guests")
+      .insert(guestToRow(guest))
+      .select("*")
+      .single();
+
+    if (error) {
+      if (error.code === "23505") {
+        const duplicate = await getGuestByEmail(normalizedEmail);
+        if (duplicate) {
+          throw new DuplicateGuestError(duplicate);
+        }
+      }
+      throw error;
+    }
+
+    return rowToGuest(data as GuestRow);
+  }
+
+  const guests = await getAllGuestsLegacy();
   guests.push(guest);
-  await saveAllGuests(guests);
+  await saveAllGuestsLegacy(guests);
   return guest;
 }
 
 export async function getGuestByCode(code: string): Promise<Guest | null> {
-  const guests = await getAllGuests();
+  if (isSupabaseConfigured()) {
+    const supabase = getSupabaseAdmin();
+    const { data, error } = await supabase
+      .from("guests")
+      .select("*")
+      .eq("code", code)
+      .maybeSingle();
+
+    if (error) {
+      throw error;
+    }
+
+    return data ? rowToGuest(data as GuestRow) : null;
+  }
+
+  const guests = await getAllGuestsLegacy();
   return guests.find((g) => g.code === code) ?? null;
 }
 
 export async function checkInGuest(
   code: string
 ): Promise<{ guest: Guest; alreadyCheckedIn: boolean } | null> {
-  const guests = await getAllGuests();
+  if (isSupabaseConfigured()) {
+    const supabase = getSupabaseAdmin();
+    const existing = await getGuestByCode(code);
+    if (!existing) return null;
+
+    const alreadyCheckedIn = Boolean(existing.checkedInAt);
+    if (alreadyCheckedIn) {
+      return { guest: existing, alreadyCheckedIn: true };
+    }
+
+    const checkedInAt = new Date().toISOString();
+    const { data, error } = await supabase
+      .from("guests")
+      .update({ checked_in_at: checkedInAt })
+      .eq("code", code)
+      .select("*")
+      .single();
+
+    if (error) {
+      throw error;
+    }
+
+    return {
+      guest: rowToGuest(data as GuestRow),
+      alreadyCheckedIn: false,
+    };
+  }
+
+  const guests = await getAllGuestsLegacy();
   const index = guests.findIndex((g) => g.code === code);
   if (index === -1) return null;
 
@@ -134,7 +273,7 @@ export async function checkInGuest(
       ...guests[index],
       checkedInAt: new Date().toISOString(),
     };
-    await saveAllGuests(guests);
+    await saveAllGuestsLegacy(guests);
   }
 
   return { guest: guests[index], alreadyCheckedIn };
