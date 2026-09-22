@@ -155,19 +155,6 @@ export default function RsvpPage() {
         </div>
 
         <div>
-          <label htmlFor="dietaryNotes" className="mb-1.5 block text-sm font-medium">
-            Dietary requirements
-          </label>
-          <input
-            id="dietaryNotes"
-            value={form.dietaryNotes}
-            onChange={(e) => setForm({ ...form, dietaryNotes: e.target.value })}
-            className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none transition focus:border-purple-soft focus:ring-2 focus:ring-purple-soft/20"
-            placeholder="Allergies, vegetarian, etc."
-          />
-        </div>
-
-        <div>
           <label htmlFor="message" className="mb-1.5 block text-sm font-medium">
             Message to the couple *
           </label>
