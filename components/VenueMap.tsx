@@ -1,6 +1,6 @@
 import {
-  getGoogleMapsDirectionsUrl,
   getMapEmbedUrl,
+  getVenueDirectionsUrl,
   wedding,
 } from "@/lib/wedding-data";
 
@@ -9,6 +9,7 @@ type VenueMapCardProps = {
   address: string;
   time: string;
   mapQuery: string;
+  mapsUrl?: string;
   mapNote?: string;
 };
 
@@ -17,10 +18,11 @@ function VenueMapCard({
   address,
   time,
   mapQuery,
+  mapsUrl,
   mapNote,
 }: VenueMapCardProps) {
   const embedUrl = getMapEmbedUrl(mapQuery);
-  const directionsUrl = getGoogleMapsDirectionsUrl(mapQuery);
+  const directionsUrl = getVenueDirectionsUrl({ mapQuery, mapsUrl });
 
   return (
     <div className="card-surface overflow-hidden rounded-3xl">
@@ -72,6 +74,7 @@ export function VenueMap() {
         address={reception.address}
         time={reception.time}
         mapQuery={reception.mapQuery}
+        mapsUrl={reception.mapsUrl}
       />
     </div>
   );

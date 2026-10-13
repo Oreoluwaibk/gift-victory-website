@@ -102,7 +102,7 @@ export default function HomePage() {
               <h2 className="font-display text-2xl font-semibold">Where</h2>
               <p className="mt-2 text-muted-foreground">{wedding.venue}</p>
               <p className="mt-1 text-sm text-muted-foreground/80">
-                RCCG Goodnews Zonal Headquarters · Light Magic Event Centre
+                RCCG Goodnews Zonal Headquarters · LCU Conference Centre
               </p>
               <Link
                 href="/location"

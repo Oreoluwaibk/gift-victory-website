@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Clock, ExternalLink, MapPin, Navigation2 } from "lucide-react";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/PageTransition";
 import { VenueMap } from "@/components/VenueMap";
-import { getGoogleMapsSearchUrl, wedding } from "@/lib/wedding-data";
+import { getVenueMapsUrl, wedding } from "@/lib/wedding-data";
 
 export default function LocationPage() {
   const { ceremony, reception } = wedding.location;
@@ -35,7 +35,7 @@ export default function LocationPage() {
             </p>
             <p className="mt-2 text-muted-foreground">{ceremony.address}</p>
             <a
-              href={getGoogleMapsSearchUrl(ceremony.mapQuery)}
+              href={getVenueMapsUrl(ceremony)}
               target="_blank"
               rel="noopener noreferrer"
               className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-purple-rich hover:underline"
@@ -55,7 +55,7 @@ export default function LocationPage() {
             </p>
             <p className="mt-2 text-muted-foreground">{reception.address}</p>
             <a
-              href={getGoogleMapsSearchUrl(reception.mapQuery)}
+              href={getVenueMapsUrl(reception)}
               target="_blank"
               rel="noopener noreferrer"
               className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-purple-rich hover:underline"

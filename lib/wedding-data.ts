@@ -32,15 +32,15 @@ export const wedding = {
       mapQuery: "8RGV+2WG, Idi-Iroko/Ikereku 110115, Oyo, Nigeria",
     },
     reception: {
-      name: "Reception — Light Magic Event Centre",
+      name: "Reception — LCU Conference Centre",
       address:
-        "No 65, IDC Primary School, Tipper Garage,Off Akala Express Road, Ibadan",
+        "LCU Conference Centre, Adjacent Postgraduate School, Lead City University, Ibadan",
       time: "2:00 PM",
-      mapQuery:
-        "Light Magic Event Centre Julius Mojisola Street Odo-Ona Elewe Oluyole Ibadan",
+      mapQuery: "LCU Conference Centre, Lead City University, Ibadan, Nigeria",
+      mapsUrl: "https://maps.app.goo.gl/FKQaRVYvZfSkbor28",
     },
     parkingNotes:
-      "Parking is available at both venues. We recommend arriving early for the 12:00 PM ceremony. The reception at Light Magic Event Centre follows at 2:00 PM.",
+      "Parking is available at both venues. We recommend arriving early for the 12:00 PM ceremony. The reception at LCU Conference Centre follows at 2:00 PM.",
   },
   story: {
     tagline:
@@ -162,4 +162,18 @@ export function getGoogleMapsDirectionsUrl(query: string): string {
 
 export function getGoogleMapsSearchUrl(query: string): string {
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+}
+
+export function getVenueMapsUrl(venue: {
+  mapQuery: string;
+  mapsUrl?: string;
+}): string {
+  return venue.mapsUrl ?? getGoogleMapsSearchUrl(venue.mapQuery);
+}
+
+export function getVenueDirectionsUrl(venue: {
+  mapQuery: string;
+  mapsUrl?: string;
+}): string {
+  return venue.mapsUrl ?? getGoogleMapsDirectionsUrl(venue.mapQuery);
 }
