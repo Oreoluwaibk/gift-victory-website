@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
-import { LogOut, Users, X } from "lucide-react";
+import { Check, Copy, Download, LogOut, Users, X } from "lucide-react";
 import type { Guest } from "@/lib/guest-store";
 
 type AdminDashboardProps = {
@@ -18,6 +18,31 @@ function formatDate(value: string | null): string {
     dateStyle: "medium",
     timeStyle: "short",
   }).format(new Date(value));
+}
+
+function escapeCsv(value: string): string {
+  if (/[",\n\r]/.test(value)) {
+    return `"${value.replace(/"/g, '""')}"`;
+  }
+  return value;
+}
+
+function downloadTextFile(filename: string, content: string, mimeType: string) {
+  const blob = new Blob([content], { type: mimeType });
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = filename;
+  anchor.click();
+  URL.revokeObjectURL(url);
+}
+
+function exportFilename(kind: "csv" | "phones" | "emails"): string {
+  const date = new Date().toISOString().slice(0, 10);
+  if (kind === "csv") {
+    return `perfect-love26-guests-${date}.csv`;
+  }
+  return `perfect-love26-${kind}-${date}.txt`;
 }
 
 function DetailRow({
@@ -133,6 +158,9 @@ export function AdminDashboard({ guests }: AdminDashboardProps) {
   const router = useRouter();
   const [selectedGuest, setSelectedGuest] = useState<Guest | null>(null);
   const [mounted, setMounted] = useState(false);
+  const [copyFeedback, setCopyFeedback] = useState<"phones" | "emails" | null>(
+    null
+  );
 
   useEffect(() => {
     setMounted(true);
@@ -142,6 +170,49 @@ export function AdminDashboard({ guests }: AdminDashboardProps) {
     await fetch("/api/admin/login", { method: "DELETE" });
     router.push("/admin/login");
     router.refresh();
+  }
+
+  function downloadCsv() {
+    const header = "Name,Phone,Email";
+    const rows = guests.map((guest) =>
+      [guest.fullName, guest.phone, guest.email].map(escapeCsv).join(",")
+    );
+    downloadTextFile(
+      exportFilename("csv"),
+      [header, ...rows].join("\n"),
+      "text/csv;charset=utf-8"
+    );
+  }
+
+  function downloadPhones() {
+    downloadTextFile(
+      exportFilename("phones"),
+      guests.map((guest) => guest.phone).join("\n"),
+      "text/plain;charset=utf-8"
+    );
+  }
+
+  function downloadEmails() {
+    downloadTextFile(
+      exportFilename("emails"),
+      guests.map((guest) => guest.email).join("\n"),
+      "text/plain;charset=utf-8"
+    );
+  }
+
+  async function copyBulk(field: "phones" | "emails") {
+    const text =
+      field === "phones"
+        ? guests.map((guest) => guest.phone).join("\n")
+        : guests.map((guest) => guest.email).join("\n");
+
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopyFeedback(field);
+      setTimeout(() => setCopyFeedback(null), 2000);
+    } catch {
+      /* clipboard unavailable */
+    }
   }
 
   return (
@@ -169,13 +240,86 @@ export function AdminDashboard({ guests }: AdminDashboardProps) {
         </div>
 
         <div className="card-surface mb-8 rounded-3xl p-6">
-          <div className="flex items-center gap-4">
-            <span className="flex h-12 w-12 items-center justify-center rounded-full bg-purple-deep/10 text-purple-rich">
-              <Users className="h-6 w-6" />
-            </span>
-            <div>
-              <p className="text-sm text-muted-foreground">Total registered</p>
-              <p className="font-display text-4xl font-bold">{guests.length}</p>
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+            <div className="flex items-center gap-4">
+              <span className="flex h-12 w-12 items-center justify-center rounded-full bg-purple-deep/10 text-purple-rich">
+                <Users className="h-6 w-6" />
+              </span>
+              <div>
+                <p className="text-sm text-muted-foreground">Total registered</p>
+                <p className="font-display text-4xl font-bold">{guests.length}</p>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+                Bulk export
+              </p>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={downloadCsv}
+                  disabled={guests.length === 0}
+                  className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-sm font-semibold transition hover:border-purple-soft hover:text-purple-rich disabled:opacity-50"
+                >
+                  <Download className="h-4 w-4" />
+                  CSV (name, phone, email)
+                </button>
+                <button
+                  type="button"
+                  onClick={downloadPhones}
+                  disabled={guests.length === 0}
+                  className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-sm font-semibold transition hover:border-purple-soft hover:text-purple-rich disabled:opacity-50"
+                >
+                  <Download className="h-4 w-4" />
+                  Phones (.txt)
+                </button>
+                <button
+                  type="button"
+                  onClick={downloadEmails}
+                  disabled={guests.length === 0}
+                  className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-sm font-semibold transition hover:border-purple-soft hover:text-purple-rich disabled:opacity-50"
+                >
+                  <Download className="h-4 w-4" />
+                  Emails (.txt)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => copyBulk("phones")}
+                  disabled={guests.length === 0}
+                  className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-sm font-semibold transition hover:border-purple-soft hover:text-purple-rich disabled:opacity-50"
+                >
+                  {copyFeedback === "phones" ? (
+                    <>
+                      <Check className="h-4 w-4" />
+                      Phones copied
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="h-4 w-4" />
+                      Copy phones
+                    </>
+                  )}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => copyBulk("emails")}
+                  disabled={guests.length === 0}
+                  className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-sm font-semibold transition hover:border-purple-soft hover:text-purple-rich disabled:opacity-50"
+                >
+                  {copyFeedback === "emails" ? (
+                    <>
+                      <Check className="h-4 w-4" />
+                      Emails copied
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="h-4 w-4" />
+                      Copy emails
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
           </div>
         </div>
